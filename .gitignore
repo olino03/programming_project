@@ -3,10 +3,7 @@
 # dependencies
 /node_modules
 /cd
-/api/__pycache__
-/api/Scripts
-/api/Lib
-/api/venv
+/api/.gitignore
 /.pnp
 .pnp.js
 
