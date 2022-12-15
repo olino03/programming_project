@@ -2,6 +2,11 @@
 
 # dependencies
 /node_modules
+/cd
+/api/__pycache__
+/api/Scripts
+/api/Lib
+/api/venv
 /.pnp
 .pnp.js
 
