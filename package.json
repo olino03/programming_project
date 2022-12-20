@@ -14,7 +14,7 @@
   "scripts": {
     "start-web": "react-scripts start",
     "api": "cd api && venv\\Scripts\\activate && python -m flask run --no-debugger",
-    "install-server": "cd api && python -m venv venv && venv\\Scripts\\activate && pip install flask python-dotenv",
+    "install-server": "cd api && python -m venv venv && venv\\Scripts\\activate && pip install -r requirements.txt",
     "start": "concurrently \"npm run api\" \"npm run start-web\" ",
     "build": "react-scripts build",
     "test": "react-scripts test",
