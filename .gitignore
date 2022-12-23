@@ -3,7 +3,6 @@
 # dependencies
 /node_modules
 /cd
-/api/.gitignore
 /.pnp
 .pnp.js
 
