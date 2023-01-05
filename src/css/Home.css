@@ -1,0 +1,64 @@
+.home {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--main-bg);
+}
+
+.home .main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home .sus,
+.home .mijloc,
+.home .jos {
+  width: 50%;
+}
+
+.home .sus {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home .sus-logo {
+  margin-top: 50px;
+  background: url("../logo-display.svg") center center no-repeat;
+  background-size: contain;
+  height: 100%;
+  display: inline-block;
+}
+
+.home .textDinala {
+  height: 30%;
+  color: var(--accent-light);
+  display: flex;
+  justify-content: center;
+}
+
+.mijloc {
+  height: 10%;
+  text-align: center;
+}
+
+.jos {
+  height: 100%;
+}
+
+.textDinalalalt {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.harta {
+  width: 100%;
+  height: 300px;
+  background-color: aquamarine;
+}
