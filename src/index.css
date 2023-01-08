@@ -1,14 +1,48 @@
 :root {
-  --main-bg: #0c1f16;
+  --accent-dark: #0c1f16;
   --accent-light: #bae3cf;
+  --accent-normal: #6ad09f;
+  --accent-darker: #1e4d36;
+  --accent-vibrant: #007f42;
+  --accent-vibrant-lighter: #38b177;
+
+  --main-bg: var(--accent-dark);
+
+  --font: "Roboto", "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  --base-font-size: 16px;
+  --font-size-largest: 4rem;
+  --font-size-larger: 3rem;
+  --font-size-large: 2rem;
+  --font-size-normal: 1rem;
+  --font-size-smaller: 0.8rem;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  font-size: var(--base-font-size);
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--main-bg);
+  font-family: var(--font);
+}
+
+.top-decoration {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  width: 100%;
+  min-height: 300px;
+  object-fit: cover;
+}
+
+.top-decoration ~ * {
+  position: relative;
+  z-index: 1;
 }
