@@ -1,0 +1,28 @@
+.mainPage {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+}
+
+.menu {
+  width: 20%;
+  height: 100%;
+  background-color: #38b177;
+  color: white;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.logs {
+  width: 20%;
+  height: 100%;
+  color: white;
+  word-wrap: break-word;
+  background-color: #38b177;
+}

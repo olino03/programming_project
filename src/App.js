@@ -1,18 +1,15 @@
 // import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import topDecorationSVG from "./svg/top-decoration.svg";
+import Main from "./pages/Main";
+// import topDecorationSVG from "./svg/top-decoration.svg";
 
 function App() {
   return (
-    <>
-      <img className="top-decoration" alt="Top" src={topDecorationSVG} />
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/main" element={<Main />} />
+    </Routes>
   );
 }
 
