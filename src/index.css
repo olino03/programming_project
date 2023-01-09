@@ -33,6 +33,15 @@ body {
   font-family: var(--font);
 }
 
+a {
+  color: inherit;
+}
+
+a:visited,
+a:active {
+  color: inherit;
+}
+
 .top-decoration {
   position: absolute;
   z-index: 0;
@@ -45,4 +54,21 @@ body {
 .top-decoration ~ * {
   position: relative;
   z-index: 1;
+}
+
+.main-button {
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(60deg, var(--accent-vibrant), var(--accent-vibrant-lighter));
+  color: var(--accent-light);
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.main-button:hover {
+  border: 5px solid rgba(255, 255, 255, 0.5);
+}
+
+.main-button:active {
+  transform: translateY(2px);
 }

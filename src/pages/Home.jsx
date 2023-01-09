@@ -24,7 +24,7 @@ export default function Home() {
         <div className="mijloc">
             <div className="call-to-action">
               <h1>Help us start making a difference.</h1>
-              <button className="get-started" onClick={openRegisterPane}>Get Started</button>  
+              <button className="main-button get-started" onClick={openRegisterPane}>Get Started</button>  
             </div>    
 
             <div className="see-latest-routes">
@@ -34,17 +34,59 @@ export default function Home() {
         </div>
 
         <div onClick={closeRegisterPane} className={`action-overlay ${activePane !== null ? "action-overlay-active" : ""}`}></div>
-        {activePane === "register" ? <RegisterPane /> : activePane === "login" && <LoginPane />}
+        {activePane === "register" ? <RegisterPane setActivePane={setActivePane} /> : activePane === "login" && <LoginPane setActivePane={setActivePane} />}
       </div>
     </div>
   );
 }
 
-function RegisterPane() {
-  return <div className="register-pane">Register pane!</div>
+function RegisterPane({ setActivePane }) {
+  return <div className="action-pane register-pane">
+    <h1>Register</h1>
+    <form>
+      <div>
+        <label>First Name</label>
+        <input type="text" placeholder="Type your first name here" />
+      </div>
+      <div>
+        <label>Last Name</label>
+        <input type="text" placeholder="Type your last name here" />
+      </div>
+      <div>
+        <label>E-Mail</label>
+        <input type="email" placeholder="Type your e-mail here" />
+      </div>
+      <div>
+        <label>Phone Number</label>
+        <input type="phone" placeholder="Type your phone number here" />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" placeholder="Type your password here" />
+        <button className="main-button">Go</button>
+      </div>
+    </form>
+
+    <div className="no-account-tip">
+      <p>Already have an account? <button onClick={() => setActivePane("login")}>Log in</button></p>
+    </div>
+  </div>
 }
 
-function LoginPane() {
-  return <div className="login-pane">Login Pane!</div>
+function LoginPane({ setActivePane }) {
+  return <div className="action-pane login-pane">
+    <h1>Log In</h1>
+    <form>
+      <label>E-Mail</label>
+      <input type="email" placeholder="Type your e-mail here" />
+      <label>Password</label>
+      <input type="password" placeholder="Type your password here" />
+      <button className="main-button">Go</button>
+    </form>
+
+    <div className="no-account-tip">
+      <p>No account? <button onClick={() => setActivePane("register")}>Make one</button></p>
+    </div>
+  </div>
 }
 
