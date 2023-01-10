@@ -1,12 +1,13 @@
 :root {
-  --accent-dark: #0c1f16;
+  --accent-darker: #0c1f16;
   --accent-light: #bae3cf;
   --accent-normal: #6ad09f;
-  --accent-darker: #1e4d36;
+  --accent-less-dark: #1e4d36;
+  --accent-dark: #173b2a;
   --accent-vibrant: #007f42;
   --accent-vibrant-lighter: #38b177;
 
-  --main-bg: var(--accent-dark);
+  --main-bg: var(--accent-darker);
 
   --font: "Roboto", "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   --base-font-size: 16px;

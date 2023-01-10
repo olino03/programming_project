@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/Home.css";
-// import { Link } from "react-router-dom";
 import topDecorationSVG from "../svg/top-decoration.svg";
 
 export default function Home() {
@@ -18,8 +17,8 @@ export default function Home() {
           <div className="sus-logo"></div>
           <div className="text-dinala">
             <p>
-              The Earth is getting dirtier, and people lazier with their product waste. We’re here to help with that, so
-              less stuff goes to the landfill, and more back into the industry.
+              GreenPath is a Timișoara-based business that aims to make this city greener, by collecting waste from
+              citizens and making sure it gets to the right place — the proper recycling centres!
             </p>
           </div>
         </div>
@@ -39,6 +38,60 @@ export default function Home() {
           <div className="see-latest-routes">
             <h3>See our latest routes</h3>
             <div className="harta"></div>
+          </div>
+        </div>
+
+        <div className="pollution-impact">
+          <h1>Pollution impacts our day to day lives in undeniable ways.</h1>
+          <div className="consequences">
+            <div className="consequences-box">
+              <div className="consequences-icon"></div>
+              <p>From the trash we sometimes observe when walking on the street...</p>
+            </div>
+            <div className="consequences-box">
+              <div className="consequences-icon"></div>
+              <p>...to the areas of our city that have become uninhabitable due to unrecycled waste.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="its-time-to-stop">
+          <div className="time-to-stop-title-bar">
+            <h1>This has become an issue we cannot ignore anymore.</h1>
+          </div>
+          <p>
+            It is important to take action, not only for the planet, but also for our lives.
+            <br />
+            <br />
+            This initiative is the result of inadequate infrastructure in our local community. Citizens lack both
+            resources and access when it comes to recycling, so we decided to step in and take the lead! We want to
+            bring the existent recycling centres to our costumers and facilitate the process in a responsible,
+            sustainable, efficient manner.
+          </p>
+        </div>
+
+        <div className="our-goals">
+          <h1>
+            OUR
+            <br />
+            GOALS
+          </h1>
+          <div className="goals">
+            <div className="goals-goal">
+              <p>We aim to improve the existing local infrastructure, thus facilitating the recycling process.</p>
+            </div>
+            <div className="goals-goal">
+              <p>
+                Because we believe a circular economy is key to sustainability, our goal is to put moral pressure on
+                policymakers and local administration to further implement this system.
+              </p>
+            </div>
+            <div className="goals-goal">
+              <p>
+                Building a safe community is our ultimate goal. We advocate for accessibility, responsibility,
+                solidarity and ultimately — care for the environment.
+              </p>
+            </div>
           </div>
         </div>
 

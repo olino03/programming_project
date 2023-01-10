@@ -35,7 +35,7 @@
 
 .home .text-dinala {
   width: 100%;
-  background-color: var(--accent-darker);
+  background-color: var(--accent-less-dark);
   color: var(--accent-light);
   padding: 10px 20px;
   margin-top: 80px;
@@ -78,6 +78,7 @@
 
 .home .action-overlay {
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100%;
@@ -97,17 +98,182 @@
   background-color: aquamarine;
 }
 
+.home .pollution-impact {
+  margin-top: 200px;
+  width: 80%;
+}
+
+.home .pollution-impact h1 {
+  font-size: var(--font-size-larger);
+  text-align: center;
+  margin: 0 auto 100px;
+  color: white;
+}
+
+.home .pollution-impact .consequences {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.home .pollution-impact .consequences-icon {
+  min-width: 70px;
+  min-height: 70px;
+  margin-bottom: 20px;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(1) .consequences-icon {
+  background: url("../svg/trash-impact.svg") center center no-repeat;
+  background-size: contain;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(2) .consequences-icon {
+  background: url("../svg/skull-emoji.svg") center center no-repeat;
+  background-size: contain;
+}
+
+.home .pollution-impact .consequences-box {
+  width: 40%;
+  min-height: 300px;
+  color: white;
+  padding: 20px 50px;
+  text-align: justify;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 35px;
+  line-height: 30px;
+}
+
+.home .pollution-impact .consequences-box p {
+  margin: 0 auto;
+}
+
+.home .pollution-impact .consequences-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent-normal);
+  border-radius: inherit;
+}
+
+.home .pollution-impact .consequences-box > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(1) {
+  background: url("../images/city-trash.jpg") center center no-repeat;
+  background-size: cover;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(1)::before {
+  opacity: 0.85;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(2) {
+  background: url("../images/city-pollution.jpg") center center no-repeat;
+  background-size: cover;
+}
+
+.home .pollution-impact .consequences-box:nth-of-type(2)::before {
+  opacity: 0.5;
+}
+
+.home .its-time-to-stop {
+  width: 80%;
+  border-radius: 35px;
+  background-color: var(--accent-dark);
+}
+
+.home .time-to-stop-title-bar {
+  width: 100%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background-color: var(--accent-less-dark);
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+.home .time-to-stop-title-bar > * {
+  margin: 0;
+}
+
+.home .its-time-to-stop > p {
+  padding: 20px 50px;
+  color: var(--accent-light);
+  line-height: 30px;
+  word-spacing: 3px;
+  text-align: justify;
+  font-size: calc(var(--font-size-normal));
+  font-weight: 300;
+}
+
+.home .our-goals {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 100px;
+  width: 80%;
+  margin-top: 150px;
+}
+
+.home .our-goals h1 {
+  font-size: calc(var(--font-size-largest) + 4vw);
+  text-align: right;
+  color: var(--accent-normal);
+}
+
+.home .goals-goal {
+  padding: 3vh 40px;
+  background-color: var(--accent-normal);
+  margin-bottom: 30px;
+  border-radius: 35px;
+  color: var(--accent-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.home .goals-goal p {
+  padding-left: 10%;
+  line-height: 30px;
+}
+
+.home .goals-goal::before {
+  opacity: 0.3;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.home .goals-goal:nth-child(1)::before {
+  content: url("../svg/recycle-icon.svg");
+}
+.home .goals-goal:nth-child(2)::before {
+  content: url("../svg/institution-icon.svg");
+}
+.home .goals-goal:nth-child(3)::before {
+  content: url("../svg/world-care-icon.svg");
+}
+
 .action-pane {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   position: fixed;
   bottom: 0;
-  z-index: 2;
+  z-index: 101;
   min-height: 90%;
   min-width: 40%;
   padding: 20px 50px;
-  background-color: var(--accent-darker);
+  background-color: var(--accent-less-dark);
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
 }
@@ -145,12 +311,12 @@
 
 .action-pane::before {
   top: 0;
-  background: linear-gradient(var(--accent-dark) -100%, transparent);
+  background: linear-gradient(var(--accent-darker), transparent);
   border-radius: inherit;
 }
 
 .action-pane::after {
-  background: linear-gradient(transparent 30%, var(--accent-dark) 150%);
+  background: linear-gradient(transparent, var(--accent-darker));
   bottom: 0;
 }
 
