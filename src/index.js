@@ -12,8 +12,13 @@ import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
 
 let DefaultIcon = L.icon({
-  iconUrl: icon,
+  // iconUrl:
+  //   "https://www.freepnglogos.com/uploads/among-us-png/green-among-us-png-character-0.png",
+  iconUrl:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Trash_Can.svg/1200px-Trash_Can.svg.png",
   shadowUrl: iconShadow,
+  iconAnchor: [16, 37],
+  iconSize: [50, 60],
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;

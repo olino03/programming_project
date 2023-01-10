@@ -25,7 +25,7 @@ function EditableMarker(props) {
   //     },
   //   });
   const eventHandlers = {
-    dragend: (e) => {
+    drag: (e) => {
       //   console.log(e.target._latlng);
       editMarker(id, e.target._latlng);
     },
@@ -123,7 +123,7 @@ export default function Main() {
         center={[45.7494, 21.2272]}
         zoom={15}
         // maxZoom={20}
-        minZoom={10}
+        minZoom={13}
         scrollWheelZoom={true}
         className="map"
         maxBounds={[
