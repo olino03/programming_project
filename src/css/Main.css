@@ -1,4 +1,4 @@
-.mainPage {
+.main-page {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -7,19 +7,19 @@
   gap: 9px;
 }
 
-.menu {
+.main-page .menu {
   width: 20%;
   height: 100%;
   background-color: #38b177;
   color: white;
 }
 
-.map {
+.main-page .map {
   width: 100%;
   height: 100%;
 }
 
-.logs {
+.main-page .logs {
   width: 20%;
   height: 100%;
   color: white;

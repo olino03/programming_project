@@ -105,8 +105,8 @@
   bottom: 0;
   z-index: 2;
   min-height: 90%;
-  padding: 0 50px;
-  min-width: 50%;
+  min-width: 40%;
+  padding: 20px 50px;
   background-color: var(--accent-darker);
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
@@ -120,18 +120,17 @@
 .action-pane form label {
   color: var(--accent-light);
   font-weight: bold;
-  font-size: larger;
+  display: block;
 }
 
 .action-pane form input {
   border-radius: 50px;
   background-color: transparent;
   padding: 15px;
-  margin-bottom: 50px;
   margin-top: 20px;
+  width: 100%;
   border: 2px solid var(--accent-light);
   color: var(--accent-light);
-  font-size: larger;
 }
 
 .action-pane::before,
@@ -181,26 +180,30 @@
   border: 0;
   text-decoration: underline;
   cursor: pointer;
-  display: inline-block;
+}
+
+.action-pane form {
+  grid-template-rows: repeat(3, 0.7fr);
+  align-items: center;
 }
 
 .register-pane form {
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 25px;
+  grid-gap: 20px;
 }
 
-.register-pane form input,
 .register-pane form button {
   width: 100%;
   margin-bottom: 0;
 }
 
 .register-pane form div:last-child {
-  /* width: 213%; bro pls dc drq nu-i 200% destul de lung */
   grid-column: span 2;
 }
 
 .register-pane form div:last-child button {
   margin-top: 20px;
+}
+
+.login-pane form {
+  grid-gap: 40px;
 }

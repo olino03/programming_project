@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
 import "../css/Home.css";
 // import { Link } from "react-router-dom";
 import topDecorationSVG from "../svg/top-decoration.svg";
@@ -17,19 +18,20 @@ export default function Home() {
           <div className="sus-logo"></div>
           <div className="text-dinala">
             <p>
-              The Earth is getting dirtier, and people lazier with their product
-              waste. We’re here to help with that, so less stuff goes to the
-              landfill, and more back into the industry.
+              The Earth is getting dirtier, and people lazier with their product waste. We’re here to help with that, so
+              less stuff goes to the landfill, and more back into the industry.
             </p>
           </div>
         </div>
+
+        <Link to="/main">
+          <button className="main-button get-started">Go to main [debugging]</button>
+        </Link>
+
         <div className="mijloc">
           <div className="call-to-action">
             <h1>Help us start making a difference.</h1>
-            <button
-              className="main-button get-started"
-              onClick={openRegisterPane}
-            >
+            <button className="main-button get-started" onClick={openRegisterPane}>
               Get Started
             </button>
           </div>
@@ -42,9 +44,7 @@ export default function Home() {
 
         <div
           onClick={closeRegisterPane}
-          className={`action-overlay ${
-            activePane !== null ? "action-overlay-active" : ""
-          }`}
+          className={`action-overlay ${activePane !== null ? "action-overlay-active" : ""}`}
         ></div>
         {activePane === "register" ? (
           <RegisterPane setActivePane={setActivePane} />
@@ -86,8 +86,7 @@ function RegisterPane({ setActivePane }) {
 
       <div className="no-account-tip">
         <p>
-          Already have an account?{" "}
-          <button onClick={() => setActivePane("login")}>Log in</button>
+          Already have an account? <button onClick={() => setActivePane("login")}>Log in</button>
         </p>
       </div>
     </div>
@@ -99,17 +98,20 @@ function LoginPane({ setActivePane }) {
     <div className="action-pane login-pane">
       <h1>Log In</h1>
       <form>
-        <label>E-Mail</label>
-        <input type="email" placeholder="Type your e-mail here" />
-        <label>Password</label>
-        <input type="password" placeholder="Type your password here" />
+        <div>
+          <label>E-Mail</label>
+          <input type="email" placeholder="Type your e-mail here" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" placeholder="Type your password here" />
+        </div>
         <button className="main-button">GO</button>
       </form>
 
       <div className="no-account-tip">
         <p>
-          No account?{" "}
-          <button onClick={() => setActivePane("register")}>Make one</button>
+          No account? <button onClick={() => setActivePane("register")}>Make one</button>
         </p>
       </div>
     </div>

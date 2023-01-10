@@ -1,96 +1,64 @@
-import { LatLng } from "leaflet";
-import { useMemo, useRef, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  useMap,
-  Marker,
-  Popup,
-  useMapEvents,
-} from "react-leaflet";
-
+import { useCallback, useMemo, useState } from "react";
+import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import { Link } from "react-router-dom";
 import "../css/Main.css";
 
-function EditableMarker(props) {
-  const { id, position, editMarker, deleteMarker } = props;
-  const [clicked, setClicked] = useState(false);
-  const [clickTimeout, setClickTimeout] = useState();
-
-  //   const markerRef = useRef(null);
-  // const eH
-  //   useMapEvents({
-  //     dragEnd: (e) => {
-  //       editMarker(id, e.latlng);
-  //       console.log(e);
-  //     },
-  //   });
-  const eventHandlers = {
-    drag: (e) => {
-      //   console.log(e.target._latlng);
-      editMarker(id, e.target._latlng);
-    },
-    click: (e) => {
-      //   console.log(clickTimeout);
-      if (!clicked) {
-        setClicked(true);
-        setClickTimeout(
-          setTimeout(() => {
-            setClicked(false);
-          }, 300)
-        );
-      } else {
-        // console.log("double click");
+function EditableMarker({ id, position, editMarker, deleteMarker }) {
+  const eventHandlers = useMemo(
+    () => ({
+      drag: (event) => {
+        editMarker(id, event.target._latlng);
+      },
+      contextmenu: (event) => {
         deleteMarker(id);
-        clearTimeout(clickTimeout);
-        setClicked(false);
-      }
-    },
-  };
-
-  return (
-    <Marker
-      autoPan={true}
-      eventHandlers={eventHandlers}
-      draggable={true}
-      position={position}
-    ></Marker>
+        event.originalEvent.preventDefault();
+      },
+    }),
+    [editMarker, deleteMarker, id]
   );
+
+  return <Marker autoPan={true} eventHandlers={eventHandlers} draggable={true} position={position}></Marker>;
 }
 
-function MapMarkers(props) {
-  const { setMapPoints } = props;
-
-  const [markers, setMarkers] = useState([[45.7494, 21.2272]]);
-
+function MapMarkers({ markers, setMarkers }) {
   useMapEvents({
-    click(e) {
-      //   console.log(e);
-      let _markers = [...markers];
-      _markers.push(e.latlng);
-      setMarkers(_markers);
-      setMapPoints(_markers);
+    click({ latlng }) {
+      const isThisMarkerTooCloseToAnother = markers.some(
+        (marker) => Math.abs(latlng.lat - marker.lat) < 0.0001 && Math.abs(latlng.lng - marker.lng) < 0.0001
+      );
+      if (isThisMarkerTooCloseToAnother) return;
+
+      const markersWithNewEntry = markers.concat(latlng);
+      setMarkers(markersWithNewEntry);
+    },
+    contextmenu(event) {
+      event.originalEvent.preventDefault();
     },
   });
 
-  const editMarker = (id, latlng) => {
-    // console.log(id);
-    let _markers = [...markers];
-    _markers[id] = latlng;
-    // console.log(_markers);
-    setMarkers(_markers);
-    setMapPoints(_markers);
-  };
+  const editMarker = useCallback(
+    (targetMarkerID, latitudeLongitude) => {
+      setMarkers((markers) => {
+        const updatedMarkers = markers.slice(0);
+        updatedMarkers[targetMarkerID] = latitudeLongitude;
+        return updatedMarkers;
+      });
+    },
+    [setMarkers]
+  );
 
-  const deleteMarker = (id) => {
-    let _markers = [...markers];
-    _markers.splice(id, 1);
-    setMarkers(_markers);
-    setMapPoints(_markers);
-  };
+  const deleteMarker = useCallback(
+    (targetMarkerID) =>
+      setMarkers((markers) => {
+        const markersWithoutTarget = markers.filter((_, markerID) => targetMarkerID !== markerID);
+        return markersWithoutTarget;
+      }),
+    [setMarkers]
+  );
 
-  return (
-    <>
-      {markers.map((marker, i) => (
+  const allMarkerElements = useMemo(
+    () =>
+      markers.map((marker, i) => (
         <EditableMarker
           position={marker}
           key={i}
@@ -98,31 +66,26 @@ function MapMarkers(props) {
           editMarker={editMarker}
           deleteMarker={deleteMarker}
         ></EditableMarker>
-      ))}
-    </>
+      )),
+    [markers, editMarker, deleteMarker]
   );
+
+  return allMarkerElements;
 }
 
 export default function Main() {
-  const [mapPoints, setMapPoints] = useState([[45.7494, 21.2272]]);
-
-  //   const [markers, setMarkers] = useState([[45.7494, 21.2272]]);
-
-  //   useMapEvents({
-  //     click(e) {
-  //       let _markers = [...markers];
-  //       _markers.push(e.latlng);
-  //       setMarkers(_markers);
-  //     },
-  //   });
+  const [markers, setMarkers] = useState([[45.7494, 21.2272]]);
 
   return (
-    <div className="mainPage">
-      <div className="menu">buttons</div>
+    <div className="main-page">
+      <div className="menu">
+        <Link to="/">
+          <button className="main-button get-started">Go to home [debugging]</button>
+        </Link>
+      </div>
       <MapContainer
         center={[45.7494, 21.2272]}
         zoom={15}
-        // maxZoom={20}
         minZoom={13}
         scrollWheelZoom={true}
         className="map"
@@ -131,17 +94,16 @@ export default function Main() {
           [45.834174, 21.327244],
         ]}
         doubleClickZoom={false}
-        // maxBoundsViscosity={0}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <MapMarkers setMapPoints={setMapPoints} />
+        <MapMarkers markers={markers} setMarkers={setMarkers} />
       </MapContainer>
       <div className="logs">
         <h1>Map Points:</h1>
-        <p>{mapPoints.join("\n")}</p>
+        <p>{markers.join("\n")}</p>
       </div>
     </div>
   );
