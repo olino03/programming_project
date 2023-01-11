@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask_mongoengine
 PyJWT
+bcrypt
