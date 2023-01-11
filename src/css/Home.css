@@ -299,11 +299,6 @@
   color: var(--accent-light);
 }
 
-.action-pane form .err {
-  color: red;
-  font-weight: bold;
-}
-
 .action-pane::before,
 .action-pane::after {
   content: "";
@@ -343,6 +338,10 @@
   font-size: var(--font-size-normal);
 }
 
+.action-pane .no-account-tip p {
+  margin: 0;
+}
+
 .action-pane .no-account-tip button {
   color: inherit;
   font-family: inherit;
@@ -367,7 +366,7 @@
   margin-bottom: 0;
 }
 
-.register-pane form div:last-child {
+.register-pane form > div:last-child {
   grid-column: span 2;
 }
 
