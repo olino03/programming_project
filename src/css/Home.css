@@ -299,6 +299,11 @@
   color: var(--accent-light);
 }
 
+.action-pane form .err {
+  color: red;
+  font-weight: bold;
+}
+
 .action-pane::before,
 .action-pane::after {
   content: "";

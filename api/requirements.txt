@@ -1,4 +1,5 @@
 flask
+Flask-Cors
 python-dotenv
 flask_mongoengine
 PyJWT

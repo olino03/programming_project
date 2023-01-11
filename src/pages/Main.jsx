@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../css/Main.css";
 
 function EditableMarker({ id, position, editMarker, deleteMarker }) {
@@ -17,14 +17,23 @@ function EditableMarker({ id, position, editMarker, deleteMarker }) {
     [editMarker, deleteMarker, id]
   );
 
-  return <Marker autoPan={true} eventHandlers={eventHandlers} draggable={true} position={position}></Marker>;
+  return (
+    <Marker
+      autoPan={true}
+      eventHandlers={eventHandlers}
+      draggable={true}
+      position={position}
+    ></Marker>
+  );
 }
 
 function MapMarkers({ markers, setMarkers }) {
   useMapEvents({
     click({ latlng }) {
       const isThisMarkerTooCloseToAnother = markers.some(
-        (marker) => Math.abs(latlng.lat - marker.lat) < 0.0001 && Math.abs(latlng.lng - marker.lng) < 0.0001
+        (marker) =>
+          Math.abs(latlng.lat - marker.lat) < 0.0001 &&
+          Math.abs(latlng.lng - marker.lng) < 0.0001
       );
       if (isThisMarkerTooCloseToAnother) return;
 
@@ -50,7 +59,9 @@ function MapMarkers({ markers, setMarkers }) {
   const deleteMarker = useCallback(
     (targetMarkerID) =>
       setMarkers((markers) => {
-        const markersWithoutTarget = markers.filter((_, markerID) => targetMarkerID !== markerID);
+        const markersWithoutTarget = markers.filter(
+          (_, markerID) => targetMarkerID !== markerID
+        );
         return markersWithoutTarget;
       }),
     [setMarkers]
@@ -74,14 +85,21 @@ function MapMarkers({ markers, setMarkers }) {
 }
 
 export default function Main() {
+  const navigate = useNavigate();
+
   const [markers, setMarkers] = useState([[45.7494, 21.2272]]);
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/");
+  };
 
   return (
     <div className="main-page">
       <div className="menu">
-        <Link to="/">
-          <button className="main-button get-started">Go to home [debugging]</button>
-        </Link>
+        <button onClick={() => logout()} className="main-button get-started">
+          Log out
+        </button>
       </div>
       <MapContainer
         center={[45.7494, 21.2272]}
