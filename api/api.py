@@ -52,7 +52,7 @@ def register():
 
     user = User.objects(email=data['email'])
     if user:
-        return {"success": False, "message": "An account with this e-emil already exists."}
+        return {"success": False, "message": "An account with this e-mail already exists."}
 
     received_password = bytes(data['password'], 'UTF-8')
 
