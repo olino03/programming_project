@@ -36,14 +36,14 @@ def after_request(response):
 def get_current_time():
     return {'time': time.time()}
 
-
 class User(db.Document):
     fname = db.StringField()
     lname = db.StringField()
     email = db.StringField()
-    phone = db.StringField()
+    type = db.StringField()
     password = db.StringField()
     accessToken = db.StringField()
+    tasks = db.ListField()
 
 
 @app.route('/register', methods=["POST"])
@@ -62,7 +62,7 @@ def register():
     hashed_password = bcrypt.hashpw(received_password, bcrypt.gensalt())
 
     User(fname=data['fname'], lname=data['lname'], email=data['email'],
-         phone=data["phone"], password=hashed_password, accessToken=encoded_jwt).save()
+         type=data["type"], password=hashed_password, accessToken=encoded_jwt).save()
     return {"success": True, 'accessToken': encoded_jwt}
 
 
