@@ -279,7 +279,9 @@
 }
 
 .action-pane form {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   padding: 20px 0;
 }
 
@@ -289,7 +291,8 @@
   display: block;
 }
 
-.action-pane form input {
+.action-pane form input,
+.action-pane form select {
   border-radius: 50px;
   background-color: transparent;
   padding: 15px;
@@ -297,6 +300,10 @@
   width: 100%;
   border: 2px solid var(--accent-light);
   color: var(--accent-light);
+}
+
+.action-pane form select option {
+  background-color: var(--accent-less-dark);
 }
 
 .action-pane::before,
@@ -352,22 +359,23 @@
   cursor: pointer;
 }
 
-.action-pane form {
-  grid-template-rows: repeat(3, 0.7fr);
-  align-items: center;
+.register-pane form {
+  gap: 20px;
 }
 
-.register-pane form {
-  grid-gap: 20px;
+.register-pane form input,
+.register-pane form select {
+  padding: 10px;
+}
+
+.register-pane form > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 0 20px;
 }
 
 .register-pane form button {
   width: 100%;
-  margin-bottom: 0;
-}
-
-.register-pane form > div:last-child {
-  grid-column: span 2;
 }
 
 .register-pane form div:last-child button {
@@ -375,5 +383,5 @@
 }
 
 .login-pane form {
-  grid-gap: 40px;
+  gap: 40px;
 }

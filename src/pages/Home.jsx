@@ -141,7 +141,7 @@ function RegisterPane({ setActivePane }) {
     fname: "",
     lname: "",
     email: "",
-    phone: "",
+    type: "",
     password: "",
   });
 
@@ -174,20 +174,22 @@ function RegisterPane({ setActivePane }) {
       <h1>Register</h1>
       <form>
         <div>
-          <label>First Name</label>
-          <input
-            type="text"
-            onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, fname: value }))}
-            placeholder="Type your first name here"
-          />
-        </div>
-        <div>
-          <label>Last Name</label>
-          <input
-            type="text"
-            onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, lname: value }))}
-            placeholder="Type your last name here"
-          />
+          <div style={{ flex: "1" }}>
+            <label>First Name</label>
+            <input
+              type="text"
+              onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, fname: value }))}
+              placeholder="Type your first name here"
+            />
+          </div>
+          <div style={{ flex: "1" }}>
+            <label>Last Name</label>
+            <input
+              type="text"
+              onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, lname: value }))}
+              placeholder="Type your last name here"
+            />
+          </div>
         </div>
         <div>
           <label>E-Mail</label>
@@ -198,24 +200,23 @@ function RegisterPane({ setActivePane }) {
           />
         </div>
         <div>
-          <label>Phone Number</label>
-          <input
-            type="phone"
-            onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, phone: value }))}
-            placeholder="Type your phone number here"
-          />
-        </div>
-        <div>
           <label>Password</label>
           <input
             type="password"
             onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, password: value }))}
             placeholder="Type your password here"
           />
-          <button type="button" className="main-button" onClick={register}>
-            GO
-          </button>
         </div>
+        <div>
+          <label>I am a...</label>
+          <select onChange={({ target: { value } }) => setFormData((oldFormData) => ({ ...oldFormData, type: value }))}>
+            <option>Client</option>
+            <option>Worker</option>
+          </select>
+        </div>
+        <button type="button" className="main-button" onClick={register}>
+          GO
+        </button>
       </form>
 
       <div className="no-account-tip">
