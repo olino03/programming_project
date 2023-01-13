@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Main.css";
 import Map from "./Map";
-import { calculateRoute } from "./Routing";
+import { calculateRoute } from "../utils/calculateRoute";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function Main() {
   // ];
 
   useEffect(() => {
-    // generateSummaryArray(markers);
+    generateSummaryArray(markers);
   }, [markers]);
 
   const generateSummaryArray = async (waypoints) => {
@@ -57,7 +57,7 @@ export default function Main() {
       </div>
       <div className="logs">
         <div className="mapp">
-          <Map getMarkers={getMarkers} />
+          <Map getMarkers={getMarkers} editable={true} line={false} />
         </div>
       </div>
     </div>

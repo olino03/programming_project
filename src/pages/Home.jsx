@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
 import topDecorationSVG from "../svg/top-decoration.svg";
 import getUserLoggedInState from "../utils/getUserLoggedInState";
+import Map from "./Map";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -50,7 +51,9 @@ export default function Home() {
 
             <div className="see-latest-routes">
               <h3>See our latest routes</h3>
-              <div className="harta"></div>
+              <div className="harta">
+                <Map getMarkers={() => {}} editable={false} line={false} />
+              </div>
             </div>
           </div>
 
