@@ -57,7 +57,7 @@ def register():
     received_password = bytes(data['password'], 'UTF-8')
 
     encoded_jwt = jwt.encode(
-        {"email": data['email']}, secret, algorithm="HS256")
+        {"email": data['email'], "type": data['type']}, secret, algorithm="HS256")
 
     hashed_password = bcrypt.hashpw(received_password, bcrypt.gensalt())
 

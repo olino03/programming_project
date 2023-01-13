@@ -1,82 +1,45 @@
-import { useCallback, useMemo, useState } from "react";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Main.css";
-
-function EditableMarker({ id, position, editMarker, deleteMarker }) {
-  const eventHandlers = useMemo(
-    () => ({
-      drag: (event) => {
-        editMarker(id, event.target._latlng);
-      },
-      contextmenu: (event) => {
-        deleteMarker(id);
-        event.originalEvent.preventDefault();
-      },
-    }),
-    [editMarker, deleteMarker, id]
-  );
-
-  return <Marker autoPan={true} eventHandlers={eventHandlers} draggable={true} position={position}></Marker>;
-}
-
-function MapMarkers({ markers, setMarkers }) {
-  useMapEvents({
-    click({ latlng }) {
-      const isThisMarkerTooCloseToAnother = markers.some(
-        (marker) => Math.abs(latlng.lat - marker.lat) < 0.0001 && Math.abs(latlng.lng - marker.lng) < 0.0001
-      );
-      if (isThisMarkerTooCloseToAnother) return;
-
-      const markersWithNewEntry = markers.concat(latlng);
-      setMarkers(markersWithNewEntry);
-    },
-    contextmenu(event) {
-      event.originalEvent.preventDefault();
-    },
-  });
-
-  const editMarker = useCallback(
-    (targetMarkerID, latitudeLongitude) => {
-      setMarkers((markers) => {
-        const updatedMarkers = markers.slice(0);
-        updatedMarkers[targetMarkerID] = latitudeLongitude;
-        return updatedMarkers;
-      });
-    },
-    [setMarkers]
-  );
-
-  const deleteMarker = useCallback(
-    (targetMarkerID) =>
-      setMarkers((markers) => {
-        const markersWithoutTarget = markers.filter((_, markerID) => targetMarkerID !== markerID);
-        return markersWithoutTarget;
-      }),
-    [setMarkers]
-  );
-
-  const allMarkerElements = useMemo(
-    () =>
-      markers.map((marker, i) => (
-        <EditableMarker
-          position={marker}
-          key={i}
-          id={i}
-          editMarker={editMarker}
-          deleteMarker={deleteMarker}
-        ></EditableMarker>
-      )),
-    [markers, editMarker, deleteMarker]
-  );
-
-  return allMarkerElements;
-}
+import Map from "./Map";
+import { calculateRoute } from "./Routing";
 
 export default function Main() {
   const navigate = useNavigate();
+  const [markers, setMarkers] = useState([]);
 
-  const [markers, setMarkers] = useState([[45.7494, 21.2272]]);
+  const getMarkers = (markers) => {
+    setMarkers(markers);
+  };
+
+  // const waypoints = [
+  //   [45.7494, 21.2272],
+  //   [45.752433, 21.20704],
+  //   [45.753451025581775, 21.231252751945977],
+  //   [45.75614592646953, 21.225058547362323],
+  //   [45.75740350234746, 21.231028466175978],
+  // ];
+
+  useEffect(() => {
+    // generateSummaryArray(markers);
+  }, [markers]);
+
+  const generateSummaryArray = async (waypoints) => {
+    let data = [];
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      for (let j = i + 1; j <= waypoints.length - 1; j++) {
+        // console.log(i, j);
+        const routeData = await calculateRoute([waypoints[i], waypoints[j]]);
+        // console.log(routeData);
+        data.push({
+          waypoints: [waypoints[i], waypoints[j]],
+          distance: routeData["totalDistance"],
+          time: routeData["totalTime"],
+        });
+      }
+    }
+    console.log(data);
+  };
 
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
@@ -89,28 +52,13 @@ export default function Main() {
         <button onClick={logout} className="main-button get-started">
           Log out
         </button>
-      </div>
-      <MapContainer
-        center={[45.7494, 21.2272]}
-        zoom={15}
-        minZoom={13}
-        scrollWheelZoom={true}
-        className="map"
-        maxBounds={[
-          [45.683825, 21.111682],
-          [45.834174, 21.327244],
-        ]}
-        doubleClickZoom={false}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MapMarkers markers={markers} setMarkers={setMarkers} />
-      </MapContainer>
-      <div className="logs">
         <h1>Map Points:</h1>
         <p>{markers.join("\n")}</p>
+      </div>
+      <div className="logs">
+        <div className="mapp">
+          <Map getMarkers={getMarkers} />
+        </div>
       </div>
     </div>
   );

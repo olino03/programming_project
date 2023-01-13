@@ -8,21 +8,26 @@
 }
 
 .main-page .menu {
-  width: 20%;
+  width: 100%;
   height: 100%;
   background-color: #38b177;
   color: white;
 }
 
-.main-page .map {
-  width: 100%;
-  height: 100%;
-}
-
 .main-page .logs {
-  width: 20%;
+  width: 100%;
   height: 100%;
   color: white;
   word-wrap: break-word;
   background-color: #38b177;
+}
+
+.main-page .logs .mapp {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.leaflet-routing-container {
+  display: none;
 }
