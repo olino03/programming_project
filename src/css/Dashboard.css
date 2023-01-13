@@ -1,0 +1,112 @@
+.top-decoration-dashboard {
+  object-position: bottom;
+  height: 200px;
+}
+
+.type-dashboard {
+  margin-top: 200px;
+  padding: 50px 80px;
+  display: flex;
+  gap: 0 20px;
+}
+
+.type-dashboard-left h1 {
+  color: white;
+  font-size: var(--font-size-larger);
+}
+
+.type-dashboard-left .main-button {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.type-dashboard-right .section-top {
+  width: 100%;
+  background-color: var(--accent-less-dark);
+  color: white;
+  padding: 40px;
+}
+
+.type-dashboard-right .first-section-top {
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+  margin-bottom: 30px;
+}
+
+.type-dashboard-right .section-top h2 {
+  margin: 0;
+}
+
+.type-dashboard-left,
+.type-dashboard-right {
+  flex: 1;
+}
+
+.type-dashboard-right {
+  background-color: var(--accent-dark);
+  border-radius: 35px;
+}
+
+.create-new-task {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border-radius: 35px;
+  z-index: 101;
+  width: 90%;
+  height: 90%;
+  background-color: var(--accent-less-dark);
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 40px;
+}
+
+.new-task-form-part {
+  display: flex;
+  align-items: center;
+}
+
+.create-new-task .new-task-form-part h2 {
+  color: white;
+}
+
+.create-new-task .new-task-form-part label {
+  margin-bottom: 20px;
+}
+.create-new-task .new-task-form-part input {
+  width: 100%;
+}
+
+.new-task-schedule-inputs,
+.new-task-form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.new-task-schedule-inputs > div,
+.new-task-form-buttons > button {
+  flex: 1;
+}
+
+.new-task-form-buttons {
+  margin-top: 50px;
+}
+
+.new-task-map-part {
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent-light);
+  flex: 1;
+}
+
+.logout-dashboard-button {
+  background-color: var(--accent-dark);
+  font-weight: 300;
+  margin: 0 20px;
+}
+
+.worker-dashboard .logout-dashboard-button {
+  margin-left: 0;
+}

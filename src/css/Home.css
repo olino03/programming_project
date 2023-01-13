@@ -76,22 +76,6 @@
   color: var(--accent-light);
 }
 
-.home .action-overlay {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-}
-
-.home .action-overlay-active {
-  display: block;
-}
-
 .harta {
   width: 300px;
   height: 300px;
@@ -285,25 +269,9 @@
   padding: 20px 0;
 }
 
-.action-pane form label {
-  color: var(--accent-light);
-  font-weight: bold;
-  display: block;
-}
-
 .action-pane form input,
 .action-pane form select {
-  border-radius: 50px;
-  background-color: transparent;
-  padding: 15px;
   margin-top: 20px;
-  width: 100%;
-  border: 2px solid var(--accent-light);
-  color: var(--accent-light);
-}
-
-.action-pane form select option {
-  background-color: var(--accent-less-dark);
 }
 
 .action-pane::before,

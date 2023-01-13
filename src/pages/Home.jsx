@@ -1,137 +1,121 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
 import topDecorationSVG from "../svg/top-decoration.svg";
+import getUserLoggedInState from "../utils/getUserLoggedInState";
 
 export default function Home() {
   const navigate = useNavigate();
 
   const [activePane, setActivePane] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const openRegisterPane = useCallback(() => setActivePane("register"), []);
   const closeRegisterPane = useCallback(() => setActivePane(null), []);
 
-  const checkToken = useCallback(async (email, accessToken) => {
-    const tokenCheckResponse = await fetch("http://localhost:5000/tokenLogin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email, accessToken: accessToken }),
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        alert("Error during token check. Check devtools.");
-        console.error(error);
-      });
-
-    if (tokenCheckResponse.success) navigate("/main");
-  }, []);
-
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken") || "";
-    const email = localStorage.getItem("email") || "";
+    getUserLoggedInState().then(({ isLoggedIn: isUserLoggedIn }) => {
+      if (isUserLoggedIn) navigate("/dashboard");
 
-    checkToken(email, accessToken);
-  }, []);
+      setIsLoggedIn(isUserLoggedIn);
+    });
+  }, [navigate]);
 
   return (
-    <div className="home">
-      <img className="top-decoration" alt="Top" src={topDecorationSVG} />
-      <div className="main">
-        <div className="sus">
-          <div className="sus-logo"></div>
-          <div className="text-dinala">
+    !isLoggedIn && (
+      <div className="home">
+        <img className="top-decoration" alt="Top" src={topDecorationSVG} />
+        <div className="main">
+          <div className="sus">
+            <div className="sus-logo"></div>
+            <div className="text-dinala">
+              <p>
+                GreenPath is a Timișoara-based business that aims to make this city greener, by collecting waste from
+                citizens and making sure it gets to the right place — the proper recycling centres!
+              </p>
+            </div>
+          </div>
+
+          <div className="mijloc">
+            <div className="call-to-action">
+              <h1>Help us start making a difference.</h1>
+              <button className="main-button get-started" onClick={openRegisterPane}>
+                Get Started
+              </button>
+            </div>
+
+            <div className="see-latest-routes">
+              <h3>See our latest routes</h3>
+              <div className="harta"></div>
+            </div>
+          </div>
+
+          <div className="pollution-impact">
+            <h1>Pollution impacts our day to day lives in undeniable ways.</h1>
+            <div className="consequences">
+              <div className="consequences-box">
+                <div className="consequences-icon"></div>
+                <p>From the trash we sometimes observe when walking on the street...</p>
+              </div>
+              <div className="consequences-box">
+                <div className="consequences-icon"></div>
+                <p>...to the areas of our city that have become uninhabitable due to unrecycled waste.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="its-time-to-stop">
+            <div className="time-to-stop-title-bar">
+              <h1>This has become an issue we cannot ignore anymore.</h1>
+            </div>
             <p>
-              GreenPath is a Timișoara-based business that aims to make this city greener, by collecting waste from
-              citizens and making sure it gets to the right place — the proper recycling centres!
+              It is important to take action, not only for the planet, but also for our lives.
+              <br />
+              <br />
+              This initiative is the result of inadequate infrastructure in our local community. Citizens lack both
+              resources and access when it comes to recycling, so we decided to step in and take the lead! We want to
+              bring the existent recycling centres to our costumers and facilitate the process in a responsible,
+              sustainable, efficient manner.
             </p>
           </div>
-        </div>
 
-        <Link to="/main">
-          <button className="main-button get-started">Go to main [debugging]</button>
-        </Link>
-
-        <div className="mijloc">
-          <div className="call-to-action">
-            <h1>Help us start making a difference.</h1>
-            <button className="main-button get-started" onClick={openRegisterPane}>
-              Get Started
-            </button>
-          </div>
-
-          <div className="see-latest-routes">
-            <h3>See our latest routes</h3>
-            <div className="harta"></div>
-          </div>
-        </div>
-
-        <div className="pollution-impact">
-          <h1>Pollution impacts our day to day lives in undeniable ways.</h1>
-          <div className="consequences">
-            <div className="consequences-box">
-              <div className="consequences-icon"></div>
-              <p>From the trash we sometimes observe when walking on the street...</p>
-            </div>
-            <div className="consequences-box">
-              <div className="consequences-icon"></div>
-              <p>...to the areas of our city that have become uninhabitable due to unrecycled waste.</p>
+          <div className="our-goals">
+            <h1>
+              OUR
+              <br />
+              GOALS
+            </h1>
+            <div className="goals">
+              <div className="goals-goal">
+                <p>We aim to improve the existing local infrastructure, thus facilitating the recycling process.</p>
+              </div>
+              <div className="goals-goal">
+                <p>
+                  Because we believe a circular economy is key to sustainability, our goal is to put moral pressure on
+                  policymakers and local administration to further implement this system.
+                </p>
+              </div>
+              <div className="goals-goal">
+                <p>
+                  Building a safe community is our ultimate goal. We advocate for accessibility, responsibility,
+                  solidarity and ultimately — care for the environment.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="its-time-to-stop">
-          <div className="time-to-stop-title-bar">
-            <h1>This has become an issue we cannot ignore anymore.</h1>
-          </div>
-          <p>
-            It is important to take action, not only for the planet, but also for our lives.
-            <br />
-            <br />
-            This initiative is the result of inadequate infrastructure in our local community. Citizens lack both
-            resources and access when it comes to recycling, so we decided to step in and take the lead! We want to
-            bring the existent recycling centres to our costumers and facilitate the process in a responsible,
-            sustainable, efficient manner.
-          </p>
+          <div
+            onClick={closeRegisterPane}
+            className={`action-overlay ${activePane !== null ? "action-overlay-active" : ""}`}
+          ></div>
+          {activePane === "register" ? (
+            <RegisterPane setActivePane={setActivePane} />
+          ) : (
+            activePane === "login" && <LoginPane setActivePane={setActivePane} />
+          )}
         </div>
-
-        <div className="our-goals">
-          <h1>
-            OUR
-            <br />
-            GOALS
-          </h1>
-          <div className="goals">
-            <div className="goals-goal">
-              <p>We aim to improve the existing local infrastructure, thus facilitating the recycling process.</p>
-            </div>
-            <div className="goals-goal">
-              <p>
-                Because we believe a circular economy is key to sustainability, our goal is to put moral pressure on
-                policymakers and local administration to further implement this system.
-              </p>
-            </div>
-            <div className="goals-goal">
-              <p>
-                Building a safe community is our ultimate goal. We advocate for accessibility, responsibility,
-                solidarity and ultimately — care for the environment.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          onClick={closeRegisterPane}
-          className={`action-overlay ${activePane !== null ? "action-overlay-active" : ""}`}
-        ></div>
-        {activePane === "register" ? (
-          <RegisterPane setActivePane={setActivePane} />
-        ) : (
-          activePane === "login" && <LoginPane setActivePane={setActivePane} />
-        )}
       </div>
-    </div>
+    )
   );
 }
 
@@ -141,7 +125,7 @@ function RegisterPane({ setActivePane }) {
     fname: "",
     lname: "",
     email: "",
-    type: "",
+    type: "Client",
     password: "",
   });
 
@@ -162,7 +146,7 @@ function RegisterPane({ setActivePane }) {
     if (registerResponse.success) {
       localStorage.setItem("accessToken", registerResponse.accessToken);
       localStorage.setItem("email", formData.email);
-      navigate("/main");
+      navigate("/dashboard");
       return;
     }
 
@@ -250,7 +234,7 @@ function LoginPane({ setActivePane }) {
     if (loginResponse.success) {
       localStorage.setItem("accessToken", loginResponse.accessToken);
       localStorage.setItem("email", email);
-      navigate("/main");
+      navigate("/dashboard");
       return;
     }
 
