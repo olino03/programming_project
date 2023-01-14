@@ -87,7 +87,7 @@ def register():
     received_password = bytes(data['password'], 'UTF-8')
 
     encoded_jwt = jwt.encode(
-        {"email": data['email'], "type": data['type']}, secret, algorithm="HS256")
+        {"fname": data['fname'], "lname": data["lname"], "email": data['email'], "type": data['type']}, secret, algorithm="HS256")
 
     hashed_password = bcrypt.hashpw(received_password, bcrypt.gensalt())
 
@@ -104,7 +104,7 @@ def login():
     except:
         return {"success": False, "message": "This e-mail doesn't exist."}
     if bcrypt.checkpw(data['password'].encode('utf-8'), user['password'].encode('utf-8')):
-        return {"success": True, "accessToken": user['accessToken']}
+        return {"success": True, "accessToken": user['accessToken'], "fname": user['fname'], "lname": user["lname"]}
     else:
         return {"success": False, "message": "Wrong password."}
 

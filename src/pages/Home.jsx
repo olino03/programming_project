@@ -170,6 +170,8 @@ function RegisterPane({ setActivePane }) {
       });
 
     if (registerResponse.success) {
+      localStorage.setItem("fname", formData.fname);
+      localStorage.setItem("lname", formData.lname);
       localStorage.setItem("accessToken", registerResponse.accessToken);
       localStorage.setItem("email", formData.email);
       navigate("/dashboard");
@@ -274,6 +276,8 @@ function LoginPane({ setActivePane }) {
       });
 
     if (loginResponse.success) {
+      localStorage.setItem("fname", loginResponse.fname);
+      localStorage.setItem("lname", loginResponse.lname);
       localStorage.setItem("accessToken", loginResponse.accessToken);
       localStorage.setItem("email", email);
       navigate("/dashboard");
