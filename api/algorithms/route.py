@@ -1,7 +1,7 @@
 import json
 import numpy as np
 import sys
-import itertools
+from itertools import permutations
 
 def parse_into_matrix(json_response):
     response = json.loads(json_response)
@@ -35,10 +35,11 @@ def permutations(elements):
         for i in range(len(elements)):
             yield perm[:i] + elements[0:1] + perm[i:]
 
-def brute_force(matrix):
+def brute_force(matrix, data_type = 0):
     elems = [i for i in range(len(matrix[0]))]
     perms = permutations(elems)
-
+    for i in perms:
+        print(i)
 
 # A greedy approximation that just takes the
 # shortest path between nodes
