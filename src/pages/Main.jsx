@@ -12,13 +12,13 @@ export default function Main() {
     setMarkers(markers);
   };
 
-  // const waypoints = [
-  //   [45.7494, 21.2272],
-  //   [45.752433, 21.20704],
-  //   [45.753451025581775, 21.231252751945977],
-  //   [45.75614592646953, 21.225058547362323],
-  //   [45.75740350234746, 21.231028466175978],
-  // ];
+  const waypoints = [
+    [45.7494, 21.2272],
+    [45.752433, 21.20704],
+    [45.753451025581775, 21.231252751945977],
+    [45.75614592646953, 21.225058547362323],
+    [45.75740350234746, 21.231028466175978],
+  ];
 
   useEffect(() => {
     generateSummaryArray(markers);
@@ -57,7 +57,12 @@ export default function Main() {
       </div>
       <div className="logs">
         <div className="mapp">
-          <Map getMarkers={getMarkers} editable={true} line={true} />
+          <Map
+            getMarkers={getMarkers}
+            editable={false}
+            line={true}
+            data={waypoints}
+          />
         </div>
       </div>
     </div>

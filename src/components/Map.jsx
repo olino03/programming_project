@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import "../css/map.css";
 import Routing from "./Routing";
 
@@ -32,7 +38,9 @@ function MapMarkers({ markers, setMarkers, editable, center, setCenter }) {
     click({ latlng }) {
       if (editable) {
         const isThisMarkerTooCloseToAnother = markers.some(
-          (marker) => Math.abs(latlng.lat - marker.lat) < 0.0001 && Math.abs(latlng.lng - marker.lng) < 0.0001
+          (marker) =>
+            Math.abs(latlng.lat - marker.lat) < 0.0001 &&
+            Math.abs(latlng.lng - marker.lng) < 0.0001
         );
         if (isThisMarkerTooCloseToAnother) return;
 
@@ -64,7 +72,9 @@ function MapMarkers({ markers, setMarkers, editable, center, setCenter }) {
   const deleteMarker = useCallback(
     (targetMarkerID) =>
       setMarkers((markers) => {
-        const markersWithoutTarget = markers.filter((_, markerID) => targetMarkerID !== markerID);
+        const markersWithoutTarget = markers.filter(
+          (_, markerID) => targetMarkerID !== markerID
+        );
         return markersWithoutTarget;
       }),
     [setMarkers]
@@ -88,7 +98,14 @@ function MapMarkers({ markers, setMarkers, editable, center, setCenter }) {
   return allMarkerElements;
 }
 
-export default function Map({ getMarkers, editable, line, setCenter = () => {}, center = [45.7494, 21.2272] }) {
+export default function Map({
+  getMarkers = () => {},
+  editable,
+  line,
+  setCenter = () => {},
+  center = [45.7494, 21.2272],
+  data = [],
+}) {
   const routingRef = useRef();
   const [markers, setMarkers] = useState([]);
 
@@ -99,6 +116,10 @@ export default function Map({ getMarkers, editable, line, setCenter = () => {}, 
       routingRef.current.hide();
     }
   }, [markers, routingRef, getMarkers]);
+
+  useEffect(() => {
+    if (data.length != 0) setMarkers(data);
+  }, []);
 
   return (
     <div className="map-wrapper">
