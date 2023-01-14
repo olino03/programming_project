@@ -1,5 +1,6 @@
 import time
 from os import environ
+from route import convert_to_final, greedy_approximation, parse_into_matrix
 
 import bcrypt
 import jwt
@@ -7,6 +8,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 import random
+import sys
 
 secret = environ.get('SECRET')
 
@@ -57,25 +59,42 @@ class Task(db.Document):
 @app.route('/createTask', methods=["POST"])
 def create_task():
     data = request.json
-    Task(taskid=random.randint(10000,99999), claimed=False, company=data['company'], schedule=data["schedule"], waypoints=data['waypoints']).save()
+    # print(data["data"], file=sys.stderr)
+    x = parse_into_matrix(data["data"])
+    preRoutes = convert_to_final(greedy_approximation(x[0], 0), x[2])
+    # print(type(preRoutes), file=sys.stderr)
+    Task(taskid=random.randint(10000,99999), claimed=False, company=data['company'], schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
     return {"success": True}
 
 @app.route('/deleteTask', methods=["POST"])
 def delete_task():
     data = request.json
-
     try:
-        task = Task.objects.get(id=data["taskid"])
+        task = Task.objects.get(taskid=data["taskid"])
     except:
         return {"success": False, "message": "This task doesn't exist."}
     else:
-        task.delete()
-        return {"success": True}
+        try:
+            user = User.objects.get(email=data['email'])
+        except:
+            return {"success": False, "message": "This email doesn't exist"}
+        else:
+            user['tasks'] = [i for i in user['tasks'] if i['taskid'] != data["taskid"]]
+            User.update(user, tasks=user['tasks'])
+            task.delete()
+            return {"success": True}
 
 @app.route('/claimTask', methods=["POST"])
 def claim_task():
     data = request.json
-    return {"success": True}
+    try:
+        user = User.objects.get(email=data['email'])
+    except:
+        return {"success": False, "message": "This email doesn't exist"}
+    else:
+        user['tasks'].append({"taskid": data['taskid'], "type": 3})
+        User.update(user, tasks=user['tasks'])
+        return {"success": True}
 
 @app.route('/register', methods=["POST"])
 def register():
