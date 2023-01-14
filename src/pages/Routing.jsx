@@ -8,13 +8,23 @@ const routeControl = (props) => {
   routeC = L.Routing.control({
     waypoints: props.waypoints,
     autoRoute: true,
-    // show: false,
+    lineOptions: {
+      styles: [
+        {
+          color: "red",
+          display: "none",
+          weight: 5,
+        },
+      ],
+    },
     collapsible: true,
     createMarker: (p1, p2) => {},
   });
-  routeC.on("routesfound", (e) => {
-    // console.log(e);
-  });
+  // console.log(props.line);
+  // if (!props.line) routeC.remove();
+  // routeC.on("routesfound", (e) => {
+  //   // console.log(e);
+  // });
   //   routeC.hide();
   // console.log(
   //   calculateRoute([
