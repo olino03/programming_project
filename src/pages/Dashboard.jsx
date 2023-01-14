@@ -95,6 +95,7 @@ function ClientDashboard({ logout, userDetails, toggleNewTaskPane }) {
 
 function CreateNewTaskPane({ toggleNewTaskPane }) {
   const [markers, setMarkers] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   // const [pickupPoints, setPickup] = useState([]);
   const [newCenter, setCenter] = useState([45.7494, 21.2272]);
 
@@ -127,6 +128,39 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
     return data;
   };
 */
+
+  const [formData, setFormData] = useState({
+    company: "",
+    schedule: ["", ""],
+    waypoints: [],
+  });
+
+  const sendTaskData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const taskSendResponse = await fetch("http://localhost:5000/createTask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, waypoints: markers }),
+      });
+
+      if (taskSendResponse?.success) {
+        setLoading(false);
+        return;
+      }
+
+      alert("Sorry, but the task data could not be sent.");
+      console.error(taskSendResponse?.message);
+      setLoading(false);
+    } catch (error) {
+      alert("Sorry, but the task data could not be sent.");
+      console.error(error);
+      setLoading(false);
+    }
+  }, [formData]);
+
   return (
     <div className="create-new-task">
       <form className="new-task-form-part">
@@ -146,7 +180,11 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
         </div>
         <div>
           <h2>Company name</h2>
-          <input type="text" placeholder="Type your company name here" />
+          <input
+            type="text"
+            onChange={({ target: { value } }) => setFormData({ ...formData, company: value })}
+            placeholder="Type your company name here"
+          />
         </div>
 
         <div>
@@ -154,26 +192,46 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
           <div className="new-task-schedule-inputs">
             <div>
               <label>From</label>
-              <select>
+              <select
+                onChange={({ target: { value } }) =>
+                  setFormData({ ...formData, schedule: [value, formData.schedule[1]] })
+                }
+              >
                 <option>12:00</option>
                 <option>13:00</option>
                 <option>14:00</option>
+                <option>15:00</option>
+                <option>16:00</option>
+                <option>17:00</option>
+                <option>18:00</option>
+                <option>19:00</option>
+                <option>20:00</option>
               </select>
             </div>
 
             <div>
               <label>To</label>
-              <select>
+              <select
+                onChange={({ target: { value } }) =>
+                  setFormData({ ...formData, schedule: [formData.schedule[0], value] })
+                }
+              >
                 <option>12:00</option>
                 <option>13:00</option>
                 <option>14:00</option>
+                <option>15:00</option>
+                <option>16:00</option>
+                <option>17:00</option>
+                <option>18:00</option>
+                <option>19:00</option>
+                <option>20:00</option>
               </select>
             </div>
           </div>
         </div>
 
         <div className="new-task-form-buttons">
-          <button className="main-button" type="button">
+          <button className="main-button" type="button" onClick={sendTaskData}>
             Create
           </button>
           <button className="secondary-button" onClick={toggleNewTaskPane}>
