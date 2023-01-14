@@ -1,77 +1,73 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Map from "../components/Map";
 import Task from "../components/Task";
 import "../css/Dashboard.css";
 import topDecorationDashboardSVG from "../svg/top-decoration-dashboard.svg";
 import getUserLoggedInState from "../utils/getUserLoggedInState";
 import { TaskTypeEnum } from "../utils/TaskTypeEnum";
-import Map from "../components/Map";
-import { calculateRoute, getGeocodedWaypoints } from "../utils/calculateRoute";
 
 export default function Dashboard() {
   const [isClient, setIsClient] = useState(true);
   const [isNewTaskPaneOpen, setNewTaskPane] = useState(false);
-  const toggleNewTaskPane = useCallback(
-    () => setNewTaskPane(!isNewTaskPaneOpen),
-    [isNewTaskPaneOpen]
-  );
+  const toggleNewTaskPane = useCallback(() => setNewTaskPane(!isNewTaskPaneOpen), [isNewTaskPaneOpen]);
   const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({ fname: "loading", lname: "loading" });
 
   useEffect(() => {
-    getUserLoggedInState().then(({ isLoggedIn, type }) =>
-      !isLoggedIn ? navigate("/") : setIsClient(type === "Client")
-    );
+    window.scrollTo(0, 0);
+    getUserLoggedInState().then(({ isLoggedIn, type, fname, lname }) => {
+      if (!isLoggedIn) {
+        navigate("/");
+        return;
+      }
+
+      console.log(fname, lname);
+      setIsClient(type === "Client");
+      setUserDetails({
+        fname: (fname ?? localStorage.getItem("fname")) || "loading",
+        lname: (lname ?? localStorage.getItem("lname")) || "loading",
+      });
+    });
   }, [navigate]);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("accessToken");
+    localStorage.clear();
     navigate("/");
   }, [navigate]);
 
   return (
     <>
       <div className="dashboard">
-        <img
-          className="top-decoration top-decoration-dashboard"
-          alt="Top"
-          src={topDecorationDashboardSVG}
-        />
+        <img className="top-decoration top-decoration-dashboard" alt="Top" src={topDecorationDashboardSVG} />
 
         {isClient ? (
-          <ClientDashboard
-            logout={logout}
-            toggleNewTaskPane={toggleNewTaskPane}
-          />
+          <ClientDashboard userDetails={userDetails} logout={logout} toggleNewTaskPane={toggleNewTaskPane} />
         ) : (
-          <WorkerDashboard logout={logout} />
+          <WorkerDashboard userDetails={userDetails} logout={logout} />
         )}
       </div>
 
       <div
         onClick={toggleNewTaskPane}
-        className={`action-overlay ${
-          isNewTaskPaneOpen ? "action-overlay-active" : ""
-        }`}
+        className={`action-overlay ${isNewTaskPaneOpen ? "action-overlay-active" : ""}`}
       ></div>
-      {isNewTaskPaneOpen && (
-        <CreateNewTaskPane toggleNewTaskPane={toggleNewTaskPane} />
-      )}
+      {isNewTaskPaneOpen && <CreateNewTaskPane toggleNewTaskPane={toggleNewTaskPane} />}
     </>
   );
 }
 
-function ClientDashboard({ logout, toggleNewTaskPane }) {
+function ClientDashboard({ logout, userDetails, toggleNewTaskPane }) {
   return (
     <div className="type-dashboard">
       <div className="type-dashboard-left">
-        <h1>Hello, [first name] [last name]</h1>
+        <h1>
+          Hello, {userDetails.fname} {userDetails.lname}
+        </h1>
         <button className="main-button" onClick={toggleNewTaskPane}>
           Create a new task
         </button>
-        <button
-          className="secondary-button logout-dashboard-button"
-          onClick={logout}
-        >
+        <button className="secondary-button logout-dashboard-button" onClick={logout}>
           Log out
         </button>
       </div>
@@ -99,11 +95,11 @@ function ClientDashboard({ logout, toggleNewTaskPane }) {
 
 function CreateNewTaskPane({ toggleNewTaskPane }) {
   const [markers, setMarkers] = useState([]);
-  const [pickupPoints, setPickup] = useState([]);
+  // const [pickupPoints, setPickup] = useState([]);
   const [newCenter, setCenter] = useState([45.7494, 21.2272]);
 
   useEffect(() => {
-    console.log(markers);
+    // console.log(markers);
     // generateSummaryArray(markers);
     // getGeocodedWaypoints(markers).then((p) => {
     //   // setPickup(p);
@@ -111,7 +107,7 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
     // });
   }, [markers]);
 
-  const generateSummaryArray = async (waypoints) => {
+  /*const generateSummaryArray = async (waypoints) => {
     let data = [];
     for (let i = 0; i < waypoints.length - 1; i++) {
       for (let j = i + 1; j <= waypoints.length - 1; j++) {
@@ -128,30 +124,32 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
         });
       }
     }
-    console.log(JSON.stringify({ data: data }));
     return data;
   };
-
+*/
   return (
     <div className="create-new-task">
       <form className="new-task-form-part">
-        <div>
-          <h2 style={{ marginTop: 0 }}>Pick-up points:</h2>
-          {markers.map((p) => (
-            <div
-              className="data-tag"
-              key={markers.indexOf(p)}
-              onClick={() => setCenter([p.lat, p.lng])}
-            >
-              {p.lat.toFixed(5)},{p.lng.toFixed(5)}
+        <h2 style={{ marginTop: 0 }}>Pick-up points:</h2>
+        <div className="new-task-pickup-points">
+          {markers.length === 0 ? (
+            <div className="data-tag">
+              {"<"}None selected{">"}
             </div>
-          ))}
-          {/* <div className="data-tag">Str. Charles, nr. 7</div>
-          <div className="data-tag">Str. Charles, nr. 7</div>
-          <div className="data-tag">Str. Charles, nr. 7</div>
-          <div className="data-tag">Str. Charles, nr. 7</div> */}
+          ) : (
+            markers.map((p, i) => (
+              <div className="data-tag" tabIndex={i} key={markers.indexOf(p)} onClick={() => setCenter([p.lat, p.lng])}>
+                {p.lat.toFixed(5)},{p.lng.toFixed(5)}
+              </div>
+            ))
+          )}
+        </div>
+        <div>
           <h2>Company name</h2>
           <input type="text" placeholder="Type your company name here" />
+        </div>
+
+        <div>
           <h2>Schedule:</h2>
           <div className="new-task-schedule-inputs">
             <div>
@@ -172,36 +170,32 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
               </select>
             </div>
           </div>
+        </div>
 
-          <div className="new-task-form-buttons">
-            <button className="main-button">Create</button>
-            <button className="secondary-button" onClick={toggleNewTaskPane}>
-              Cancel
-            </button>
-          </div>
+        <div className="new-task-form-buttons">
+          <button className="main-button" type="button">
+            Create
+          </button>
+          <button className="secondary-button" onClick={toggleNewTaskPane}>
+            Cancel
+          </button>
         </div>
       </form>
       <div className="new-task-map-part">
-        <Map
-          getMarkers={setMarkers}
-          editable={true}
-          line={false}
-          center={newCenter}
-        />
+        <Map getMarkers={setMarkers} editable={true} line={false} center={newCenter} />
       </div>
     </div>
   );
 }
 
-function WorkerDashboard({ logout }) {
+function WorkerDashboard({ logout, userDetails }) {
   return (
     <div className="worker-dashboard type-dashboard">
       <div className="type-dashboard-left">
-        <h1>Hello, [first name] [last name]</h1>
-        <button
-          className="secondary-button logout-dashboard-button"
-          onClick={logout}
-        >
+        <h1>
+          Hello, {userDetails.fname} {userDetails.lname}
+        </h1>
+        <button className="secondary-button logout-dashboard-button" onClick={logout}>
           Log out
         </button>
       </div>

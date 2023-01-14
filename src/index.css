@@ -168,6 +168,7 @@ form label {
 
 .data-tag {
   display: inline-block;
+  word-wrap: break-word;
   padding: 5px 10px;
   background-color: var(--accent-normal);
   color: var(--accent-dark);
@@ -210,4 +211,23 @@ form label {
 
 .action-overlay-active {
   display: block;
+}
+
+.task-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.company-schedule-map {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.task-company-name h3 {
+  margin-top: 0;
+}
+
+.company-schedule-map > div {
+  flex: 1;
 }

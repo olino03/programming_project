@@ -9,6 +9,11 @@
   height: 100%;
 }
 
-.leaflet-routing-container {
+.map {
+  border-radius: 35px;
+}
+
+.leaflet-routing-container,
+.leaflet-control-attribution {
   display: none;
 }

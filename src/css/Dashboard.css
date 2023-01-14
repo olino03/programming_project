@@ -64,7 +64,9 @@
 
 .new-task-form-part {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
 
 .create-new-task .new-task-form-part h2 {
@@ -97,8 +99,24 @@
 .new-task-map-part {
   width: 100%;
   height: 100%;
-  background-color: var(--accent-light);
   flex: 1;
+}
+
+.new-task-pickup-points {
+  overflow-y: auto;
+}
+
+.new-task-pickup-points .data-tag {
+  cursor: pointer;
+}
+
+.new-task-pickup-points .data-tag:hover {
+  outline: 2px solid var(--accent-light);
+}
+
+.new-task-pickup-points .data-tag:focus {
+  outline: 2px solid var(--accent-light);
+  background-color: var(--accent-vibrant-lighter);
 }
 
 .logout-dashboard-button {
