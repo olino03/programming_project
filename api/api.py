@@ -45,6 +45,36 @@ class User(db.Document):
     accessToken = db.StringField()
     tasks = db.ListField()
 
+class Task(db.Document):
+    id = db.IntField()
+    claimed = db.BooleanField()
+    company = db.StringField()
+    date = db.StringField()
+    schedule = db.ListField()
+    waypoints = db.ListField()
+    geocodedWaypoints = db.ListField()
+    precalculatedRoutes = db.ListField()
+
+@app.route('/createTask', methods=["POST"])
+def create_task():
+    data = request.json
+
+    Task(id=data["id"], claimed=data["claimed"], company=data['company'], date=data['date'], 
+        schedule=data["schedule"], waypoints=data['waypoints'], geocodedWaypoints=data['geocodedWaypoints'],
+        precalculatedRoutes=data['precalculatedRoutes']).save()
+    return {"success": True}
+
+@app.route('/deleteTask', methods=["POST"])
+def delete_task():
+    data = request.json
+
+    try:
+        task = Task.objects.get(id=data["id"])
+    except:
+        return {"success": False, "message": "This task doesn't exist."}
+    else:
+        task.delete()
+        return {"success": True}
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -91,3 +121,4 @@ def tokenLogin():
         return {"success": True, "user": user}
     else:
         return {"success": False}
+
