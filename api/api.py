@@ -6,6 +6,7 @@ import jwt
 from flask import Flask, request
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
+import random
 
 secret = environ.get('SECRET')
 
@@ -46,22 +47,17 @@ class User(db.Document):
     tasks = db.ListField()
 
 class Task(db.Document):
-    id = db.IntField()
+    taskid = db.IntField()
     claimed = db.BooleanField()
     company = db.StringField()
-    date = db.StringField()
     schedule = db.ListField()
     waypoints = db.ListField()
-    geocodedWaypoints = db.ListField()
     precalculatedRoutes = db.ListField()
 
 @app.route('/createTask', methods=["POST"])
 def create_task():
     data = request.json
-
-    Task(id=data["id"], claimed=data["claimed"], company=data['company'], date=data['date'], 
-        schedule=data["schedule"], waypoints=data['waypoints'], geocodedWaypoints=data['geocodedWaypoints'],
-        precalculatedRoutes=data['precalculatedRoutes']).save()
+    Task(taskid=random.randint(10000,99999), claimed=False, company=data['company'], schedule=data["schedule"], waypoints=data['waypoints']).save()
     return {"success": True}
 
 @app.route('/deleteTask', methods=["POST"])
@@ -69,12 +65,17 @@ def delete_task():
     data = request.json
 
     try:
-        task = Task.objects.get(id=data["id"])
+        task = Task.objects.get(id=data["taskid"])
     except:
         return {"success": False, "message": "This task doesn't exist."}
     else:
         task.delete()
         return {"success": True}
+
+@app.route('/claimTask', methods=["POST"])
+def claim_task():
+    data = request.json
+    return {"success": True}
 
 @app.route('/register', methods=["POST"])
 def register():

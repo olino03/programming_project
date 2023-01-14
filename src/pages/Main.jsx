@@ -57,7 +57,7 @@ export default function Main() {
       </div>
       <div className="logs">
         <div className="mapp">
-          <Map getMarkers={getMarkers} editable={true} line={false} />
+          <Map getMarkers={getMarkers} editable={true} line={true} />
         </div>
       </div>
     </div>
