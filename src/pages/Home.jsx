@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
 import topDecorationSVG from "../svg/top-decoration.svg";
 import getUserLoggedInState from "../utils/getUserLoggedInState";
-import Map from "./Map";
+import Map from "../components/Map";
 
 export default function Home() {
   const navigate = useNavigate();

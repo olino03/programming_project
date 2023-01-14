@@ -5,11 +5,15 @@ import "../css/Dashboard.css";
 import topDecorationDashboardSVG from "../svg/top-decoration-dashboard.svg";
 import getUserLoggedInState from "../utils/getUserLoggedInState";
 import { TaskTypeEnum } from "../utils/TaskTypeEnum";
+import Map from "../components/Map";
 
 export default function Dashboard() {
   const [isClient, setIsClient] = useState(true);
   const [isNewTaskPaneOpen, setNewTaskPane] = useState(false);
-  const toggleNewTaskPane = useCallback(() => setNewTaskPane(!isNewTaskPaneOpen), [isNewTaskPaneOpen]);
+  const toggleNewTaskPane = useCallback(
+    () => setNewTaskPane(!isNewTaskPaneOpen),
+    [isNewTaskPaneOpen]
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,10 +30,17 @@ export default function Dashboard() {
   return (
     <>
       <div className="dashboard">
-        <img className="top-decoration top-decoration-dashboard" alt="Top" src={topDecorationDashboardSVG} />
+        <img
+          className="top-decoration top-decoration-dashboard"
+          alt="Top"
+          src={topDecorationDashboardSVG}
+        />
 
         {isClient ? (
-          <ClientDashboard logout={logout} toggleNewTaskPane={toggleNewTaskPane} />
+          <ClientDashboard
+            logout={logout}
+            toggleNewTaskPane={toggleNewTaskPane}
+          />
         ) : (
           <WorkerDashboard logout={logout} />
         )}
@@ -37,9 +48,13 @@ export default function Dashboard() {
 
       <div
         onClick={toggleNewTaskPane}
-        className={`action-overlay ${isNewTaskPaneOpen ? "action-overlay-active" : ""}`}
+        className={`action-overlay ${
+          isNewTaskPaneOpen ? "action-overlay-active" : ""
+        }`}
       ></div>
-      {isNewTaskPaneOpen && <CreateNewTaskPane toggleNewTaskPane={toggleNewTaskPane} />}
+      {isNewTaskPaneOpen && (
+        <CreateNewTaskPane toggleNewTaskPane={toggleNewTaskPane} />
+      )}
     </>
   );
 }
@@ -52,7 +67,10 @@ function ClientDashboard({ logout, toggleNewTaskPane }) {
         <button className="main-button" onClick={toggleNewTaskPane}>
           Create a new task
         </button>
-        <button className="secondary-button logout-dashboard-button" onClick={logout}>
+        <button
+          className="secondary-button logout-dashboard-button"
+          onClick={logout}
+        >
           Log out
         </button>
       </div>
@@ -119,7 +137,9 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
           </div>
         </div>
       </form>
-      <div className="new-task-map-part"></div>
+      <div className="new-task-map-part">
+        <Map getMarkers={() => {}} editable={true} line={false} />
+      </div>
     </div>
   );
 }
@@ -129,7 +149,10 @@ function WorkerDashboard({ logout }) {
     <div className="worker-dashboard type-dashboard">
       <div className="type-dashboard-left">
         <h1>Hello, [first name] [last name]</h1>
-        <button className="secondary-button logout-dashboard-button" onClick={logout}>
+        <button
+          className="secondary-button logout-dashboard-button"
+          onClick={logout}
+        >
           Log out
         </button>
       </div>

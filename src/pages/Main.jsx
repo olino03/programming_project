@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Main.css";
-import Map from "./Map";
+import Map from "../components/Map";
 import { calculateRoute } from "../utils/calculateRoute";
 
 export default function Main() {
