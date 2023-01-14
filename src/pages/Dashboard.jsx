@@ -159,7 +159,7 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
 
   const sendTaskData = useCallback(async () => {
     setLoading(true);
-    console.log(markers);
+    // console.log(markers);
     try {
       const _taskSendResponse = await fetch(
         "http://localhost:5000/createTask",
@@ -171,6 +171,7 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
           body: JSON.stringify({
             ...formData,
             waypoints: markers,
+            email: localStorage.getItem("email"),
             data: await generateSummaryArray(markers),
           }),
         }

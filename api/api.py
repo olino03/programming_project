@@ -1,3 +1,4 @@
+import json
 import time
 from os import environ
 from route import convert_to_final, greedy_approximation, parse_into_matrix
@@ -55,16 +56,26 @@ class Task(db.Document):
     schedule = db.ListField()
     waypoints = db.ListField()
     precalculatedRoutes = db.ListField()
+    claimedBy = db.StringField()
 
 @app.route('/createTask', methods=["POST"])
 def create_task():
     data = request.json
+    tid = random.randint(10000,99999)
     # print(data["data"], file=sys.stderr)
     x = parse_into_matrix(data["data"])
     preRoutes = convert_to_final(greedy_approximation(x[0], 0), x[2])
     # print(type(preRoutes), file=sys.stderr)
-    Task(taskid=random.randint(10000,99999), claimed=False, company=data['company'], schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
-    return {"success": True}
+    Task(taskid=tid, claimed=False, claimedBy="", company=data['company'], schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
+    
+    try:
+        user = User.objects.get(email=data['email'])
+    except:
+        return {"success": False, "message": "This email doesn't exist"}
+    else:
+        user['tasks'].append({"taskid": tid, "type": 0})
+        User.update(user, tasks=user['tasks'])
+        return {"success": True}
 
 @app.route('/deleteTask', methods=["POST"])
 def delete_task():
@@ -94,7 +105,72 @@ def claim_task():
     else:
         user['tasks'].append({"taskid": data['taskid'], "type": 3})
         User.update(user, tasks=user['tasks'])
-        return {"success": True}
+        try:
+            task = Task.objects.get(taskid=data['taskid'])
+        except:
+            return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+        else:
+            Task.update(task, claimed=True)
+            Task.update(task, claimedBy=user["email"])
+            return {"success": True}
+
+@app.route('/fetchTasks', methods=["POST"])
+def fetch_tasks():
+    data = request.json
+    try:
+        user = User.objects.get(email=data['email'])
+    except:
+        return {"success": False, "message": "This email doesn't exist"}
+    else:
+        tasks = []
+        taskTypes = []
+        for i in user['tasks']:
+            try:
+                task = Task.objects.get(taskid=i['taskid'])
+            except:
+                return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+            else:
+                taskTypes.append(i['type'])
+                tasks.append(task)
+        return {"success": True, "tasks": tasks, "taskTypes": taskTypes};
+
+@app.route('/fetchAllTasks', methods=["GET"])
+def fetch_all_tasks():
+    tasks = []
+    for task in Task.objects:
+        if not task.claimed:
+            tasks.append(task)
+    return {"success": True, "tasks": tasks}
+
+@app.route('/finishTask', methods=["POST"])
+def finish_task():
+    data = request.json
+    try:
+        task = Task.objects.get(taskid=data['taskid'])
+    except:
+        return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+    else:
+        try:
+            user = User.objects.get(email=task["claimedBy"])
+        except:
+            return {"success": False, "message": "This email doesn't exist"}
+        else:
+            for i in user['tasks']:
+                if i['taskid'] == data['taskid']:
+                    i['type'] = 1
+            User.update(user, tasks=user['tasks'])
+            try:
+                clientUser = User.objects.get(email=data['email'])
+            except:
+                return {"success": False, "message": "This email doesn't exist"}
+            else:
+                for i in clientUser['tasks']:
+                    if int(i['taskid']) == int(data['taskid']):
+                        i['type'] = 1
+                # print(clientUser['tasks'], file=sys.stderr)
+                User.update(clientUser, tasks=clientUser['tasks'])
+                return {"success": True}
+            
 
 @app.route('/register', methods=["POST"])
 def register():
