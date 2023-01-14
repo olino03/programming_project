@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import "../css/map.css";
 import Routing from "./Routing";
@@ -28,7 +34,7 @@ function EditableMarker({ id, position, editMarker, deleteMarker, editable }) {
   );
 }
 
-function MapMarkers({ markers, setMarkers, editable }) {
+function MapMarkers({ markers, setMarkers, editable, center }) {
   useMapEvents({
     click({ latlng }) {
       if (editable) {
@@ -47,6 +53,11 @@ function MapMarkers({ markers, setMarkers, editable }) {
       event.originalEvent.preventDefault();
     },
   });
+
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center);
+  }, center);
 
   const editMarker = useCallback(
     (targetMarkerID, latitudeLongitude) => {
@@ -88,7 +99,12 @@ function MapMarkers({ markers, setMarkers, editable }) {
   return allMarkerElements;
 }
 
-export default function Map({ getMarkers, editable, line }) {
+export default function Map({
+  getMarkers,
+  editable,
+  line,
+  center = [45.7494, 21.2272],
+}) {
   const navigate = useNavigate();
 
   const routingRef = useRef();
@@ -133,6 +149,7 @@ export default function Map({ getMarkers, editable, line }) {
           markers={markers}
           setMarkers={setMarkers}
           editable={editable}
+          center={center}
         />
       </MapContainer>
     </div>

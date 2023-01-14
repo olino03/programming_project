@@ -6,6 +6,7 @@ import topDecorationDashboardSVG from "../svg/top-decoration-dashboard.svg";
 import getUserLoggedInState from "../utils/getUserLoggedInState";
 import { TaskTypeEnum } from "../utils/TaskTypeEnum";
 import Map from "../components/Map";
+import { calculateRoute, getGeocodedWaypoints } from "../utils/calculateRoute";
 
 export default function Dashboard() {
   const [isClient, setIsClient] = useState(true);
@@ -97,15 +98,58 @@ function ClientDashboard({ logout, toggleNewTaskPane }) {
 }
 
 function CreateNewTaskPane({ toggleNewTaskPane }) {
+  const [markers, setMarkers] = useState([]);
+  const [pickupPoints, setPickup] = useState([]);
+  const [newCenter, setCenter] = useState([45.7494, 21.2272]);
+
+  useEffect(() => {
+    console.log(markers);
+    // generateSummaryArray(markers);
+    // getGeocodedWaypoints(markers).then((p) => {
+    //   // setPickup(p);
+    //   console.log(p);
+    // });
+  }, [markers]);
+
+  const generateSummaryArray = async (waypoints) => {
+    let data = [];
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      for (let j = i + 1; j <= waypoints.length - 1; j++) {
+        // console.log(i, j);
+        const routeData = await calculateRoute([waypoints[i], waypoints[j]]);
+        // console.log(routeData);
+        data.push({
+          waypoints: [
+            [waypoints[i].lat, waypoints[i].lng],
+            [waypoints[j].lat, waypoints[j].lng],
+          ],
+          distance: routeData["totalDistance"],
+          time: routeData["totalTime"],
+        });
+      }
+    }
+    console.log(JSON.stringify({ data: data }));
+    return data;
+  };
+
   return (
     <div className="create-new-task">
       <form className="new-task-form-part">
         <div>
           <h2 style={{ marginTop: 0 }}>Pick-up points:</h2>
+          {markers.map((p) => (
+            <div
+              className="data-tag"
+              key={markers.indexOf(p)}
+              onClick={() => setCenter([p.lat, p.lng])}
+            >
+              {p.lat.toFixed(5)},{p.lng.toFixed(5)}
+            </div>
+          ))}
+          {/* <div className="data-tag">Str. Charles, nr. 7</div>
           <div className="data-tag">Str. Charles, nr. 7</div>
           <div className="data-tag">Str. Charles, nr. 7</div>
-          <div className="data-tag">Str. Charles, nr. 7</div>
-          <div className="data-tag">Str. Charles, nr. 7</div>
+          <div className="data-tag">Str. Charles, nr. 7</div> */}
           <h2>Company name</h2>
           <input type="text" placeholder="Type your company name here" />
           <h2>Schedule:</h2>
@@ -138,7 +182,12 @@ function CreateNewTaskPane({ toggleNewTaskPane }) {
         </div>
       </form>
       <div className="new-task-map-part">
-        <Map getMarkers={() => {}} editable={true} line={false} />
+        <Map
+          getMarkers={setMarkers}
+          editable={true}
+          line={false}
+          center={newCenter}
+        />
       </div>
     </div>
   );
