@@ -231,3 +231,7 @@ form label {
 .company-schedule-map > div {
   flex: 1;
 }
+
+button:disabled {
+  opacity: 0.5;
+}
