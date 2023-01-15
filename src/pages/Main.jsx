@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/Main.css";
 import Map from "../components/Map";
+import "../css/Main.css";
 import { calculateRoute } from "../utils/calculateRoute";
 
 export default function Main() {
@@ -38,7 +38,6 @@ export default function Main() {
         });
       }
     }
-    console.log(data);
   };
 
   const logout = useCallback(() => {
@@ -57,12 +56,7 @@ export default function Main() {
       </div>
       <div className="logs">
         <div className="mapp">
-          <Map
-            getMarkers={getMarkers}
-            editable={true}
-            line={true}
-            data={waypoints}
-          />
+          <Map getMarkers={getMarkers} editable={true} line={true} data={waypoints} />
         </div>
       </div>
     </div>

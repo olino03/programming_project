@@ -1,8 +1,8 @@
-export default async function fetchAllTasks() {
+export default async function fetchWorkerTasks() {
   const email = localStorage.getItem("email") || "";
   if (email === "") return null;
   try {
-    const taskFetchResponse = await fetch("http://localhost:5000/fetchAllTasks", {
+    const taskFetchResponse = await fetch("http://localhost:5000/fetchWorkerTasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -10,7 +10,6 @@ export default async function fetchAllTasks() {
       body: JSON.stringify({ email }),
     }).then((response) => response.json());
 
-    console.log(taskFetchResponse);
     if (taskFetchResponse?.success) return taskFetchResponse;
 
     console.error(taskFetchResponse?.message);
