@@ -59,7 +59,7 @@ export default function Main() {
         <div className="mapp">
           <Map
             getMarkers={getMarkers}
-            editable={false}
+            editable={true}
             line={true}
             data={waypoints}
           />

@@ -57,6 +57,7 @@ class Task(db.Document):
     waypoints = db.ListField()
     precalculatedRoutes = db.ListField()
     claimedBy = db.StringField()
+    claimedPoint = db.ListField()
 
 @app.route('/createTask', methods=["POST"])
 def create_task():
@@ -66,7 +67,7 @@ def create_task():
     x = parse_into_matrix(data["data"])
     preRoutes = convert_to_final(greedy_approximation(x[0], 0), x[2])
     # print(type(preRoutes), file=sys.stderr)
-    Task(taskid=tid, claimed=False, claimedBy="", company=data['company'], schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
+    Task(taskid=tid, claimedPoint=[], claimed=False, claimedBy="", company=data['company'], schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
     
     try:
         user = User.objects.get(email=data['email'])
@@ -108,10 +109,11 @@ def claim_task():
         try:
             task = Task.objects.get(taskid=data['taskid'])
         except:
-            return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+            return {"success": False, "message": "Couldn't fetch one of the tasks"}
         else:
             Task.update(task, claimed=True)
             Task.update(task, claimedBy=user["email"])
+            Task.update(task, claimedPoint=data['waypoint'])
             return {"success": True}
 
 @app.route('/fetchTasks', methods=["POST"])
@@ -128,19 +130,26 @@ def fetch_tasks():
             try:
                 task = Task.objects.get(taskid=i['taskid'])
             except:
-                return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+                return {"success": False, "message": "Couldn't fetch one of the tasks"}
             else:
-                taskTypes.append(i['type'])
                 tasks.append(task)
         return {"success": True, "tasks": tasks, "taskTypes": taskTypes};
 
-@app.route('/fetchAllTasks', methods=["GET"])
+@app.route('/fetchAllTasks', methods=["POST"])
 def fetch_all_tasks():
-    tasks = []
-    for task in Task.objects:
-        if not task.claimed:
-            tasks.append(task)
-    return {"success": True, "tasks": tasks}
+    data = request.json
+    try:
+        user = User.objects.get(email=data['email'])
+    except:
+        return {"success": False, "message": "This email doesn't exist"}
+    else:
+        tasks = []
+        userTasks = [int(i['taskid']) for i in user['tasks']]
+        for task in Task.objects:
+            # print(int(task["taskid"]) in userTasks, file=sys.stderr)
+            if not task.claimed and int(task["taskid"]) not in userTasks:
+                tasks.append(task)
+        return {"success": True, "tasks": tasks}
 
 @app.route('/finishTask', methods=["POST"])
 def finish_task():
@@ -148,7 +157,7 @@ def finish_task():
     try:
         task = Task.objects.get(taskid=data['taskid'])
     except:
-        return {"succes": False, "message": "Couldn't fetch one of the tasks"}
+        return {"success": False, "message": "Couldn't fetch one of the tasks"}
     else:
         try:
             user = User.objects.get(email=task["claimedBy"])
