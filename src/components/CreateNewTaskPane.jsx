@@ -33,7 +33,9 @@ export default function CreateNewTaskPane({ toggleNewTaskPane }) {
 
   const sendTaskData = useCallback(async () => {
     if (
-      Object.values(formData).some((datum) => typeof datum !== "object" && datum.toString().trim() === "") ||
+      Object.values(formData).some(
+        (datum) => typeof datum !== "object" && datum.toString().trim() === ""
+      ) ||
       markers.length === 0
     ) {
       alert("You left a field incomplete.");
@@ -58,7 +60,7 @@ export default function CreateNewTaskPane({ toggleNewTaskPane }) {
       if (taskSendResponse?.success) {
         setLoading(false);
         toggleNewTaskPane();
-        alert("Task created successfully.");
+        // alert("Task created successfully.");
         window.location.reload();
         return;
       }
@@ -106,7 +108,9 @@ export default function CreateNewTaskPane({ toggleNewTaskPane }) {
             <h2>Company name</h2>
             <input
               type="text"
-              onChange={({ target: { value } }) => setFormData({ ...formData, company: value })}
+              onChange={({ target: { value } }) =>
+                setFormData({ ...formData, company: value })
+              }
               placeholder="Type your company name here"
             />
           </div>
@@ -161,7 +165,11 @@ export default function CreateNewTaskPane({ toggleNewTaskPane }) {
           </div>
 
           <div className="new-task-form-buttons">
-            <button className="main-button" type="button" onClick={sendTaskData}>
+            <button
+              className="main-button"
+              type="button"
+              onClick={sendTaskData}
+            >
               Create
             </button>
             <button className="secondary-button" onClick={toggleNewTaskPane}>
@@ -170,7 +178,12 @@ export default function CreateNewTaskPane({ toggleNewTaskPane }) {
           </div>
         </form>
         <div className="new-task-map-part">
-          <Map getMarkers={setMarkers} editable={true} line={false} center={newCenter} />
+          <Map
+            getMarkers={setMarkers}
+            editable={true}
+            line={false}
+            center={newCenter}
+          />
         </div>
       </div>
     </>

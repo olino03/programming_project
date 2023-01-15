@@ -70,6 +70,7 @@ def create_task():
     # print(data["data"], file=sys.stderr)
     x = parse_into_matrix(data["data"])
     preRoutes = convert_to_final(greedy_approximation(x[0], 0), x[2])
+    print(x, file=sys.stderr)
     # print(type(preRoutes), file=sys.stderr)
     Task(taskid=tid, claimedPoint=[], claimed=False, claimedBy="", company=data['company'],
          schedule=data["schedule"], waypoints=data['waypoints'], precalculatedRoutes=preRoutes).save()
