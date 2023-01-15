@@ -7,35 +7,6 @@ import { TaskTypeEnum } from "../utils/TaskTypeEnum";
 import Map from "./Map";
 
 export function Tasks({ userTasks, allowedTaskTypes }) {
-  // const getPrecalculatedRoute = (i) => {
-  // const selectedWaypoint =
-  //   userTasks.tasks[i].claimedPoint.length != 0
-  //     ? userTasks.tasks[i].claimedPoint
-  //     : userTasks.tasks[i].waypoints[0];
-  //   // console.log(selectedWaypoint);
-  //   for (let taskObject of userTasks.tasks[i].precalculatedRoutes) {
-  //     // console.log(taskObject[0]);
-  //     // console.log(
-  //     //   taskObject[0][0] == selectedWaypoint[0] &&
-  //     //     taskObject[0][1] == selectedWaypoint[1]
-  //     // );
-  //     if (
-  //       taskObject[0][0] == selectedWaypoint[0] &&
-  //       taskObject[0][1] == selectedWaypoint[1]
-  //     ) {
-  //       // console.log(0);
-  //       let latlng = [];
-  //       // console.log(taskObject[1]);
-
-  //       for (let wp of taskObject[1]) {
-  //         // console.log(wp);
-  //         latlng.push({ lat: wp[0], lng: wp[1] });
-  //       }
-  //       return latlng;
-  //     }
-  //   }
-  // };
-
   const getPrecalculatedIndex = (i) => {
     const selectedWaypoint =
       userTasks.tasks[i].claimedPoint.length != 0
@@ -44,17 +15,13 @@ export function Tasks({ userTasks, allowedTaskTypes }) {
             lng: userTasks.tasks[i].claimedPoint[1],
           }
         : userTasks.tasks[i].waypoints[0];
-    // console.log(selectedWaypoint);
-    // console.log(userTasks.tasks[i].waypoints);
     return userTasks.tasks[i].waypoints.findIndex((wp) => {
-      // console.log(wp);
       return wp.lat == selectedWaypoint.lat && wp.lng == selectedWaypoint.lng;
     });
   };
 
   const formatToLatLng = (routes) => {
     let wps = [];
-    // console.log(routes);
     for (let wp of routes) {
       wps.push({ lat: wp[0], lng: wp[1] });
     }
@@ -98,7 +65,6 @@ export function Task({
   schedule,
   waypoints,
 }) {
-  console.log(waypoints);
   const [isToggled, setToggle] = useState(false);
   const [claimedPoint, setClaimedPoint] = useState(waypoints[0]);
 
