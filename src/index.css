@@ -250,3 +250,25 @@ form label {
 button:disabled {
   opacity: 0.5;
 }
+
+.map-preview-on-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.map-preview-on-overlay ~ .map-wrapper {
+  width: 90%;
+  height: 90%;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  z-index: 101;
+}

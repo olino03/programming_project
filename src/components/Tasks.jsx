@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import cancelTaskClient from "../utils/cancelTaskClient";
 import cancelTaskWorker from "../utils/cancelTaskWorker";
 import claimTask from "../utils/claimTask";
@@ -30,9 +30,7 @@ export function Tasks({ userTasks, allowedTaskTypes }) {
 
   return userTasks?.taskTypes?.map(
     (taskType, i) =>
-      allowedTaskTypes.some(
-        (allowedTaskType) => taskType === allowedTaskType
-      ) && (
+      allowedTaskTypes.some((allowedTaskType) => taskType === allowedTaskType) && (
         <Task
           key={`task__${i}`}
           taskID={userTasks.tasks[i].taskid}
@@ -42,11 +40,7 @@ export function Tasks({ userTasks, allowedTaskTypes }) {
           waypoints={
             userTasks.tasks[i].claimedPoint.length == 0
               ? userTasks.tasks[i].waypoints
-              : formatToLatLng(
-                  userTasks.tasks[i].precalculatedRoutes[
-                    getPrecalculatedIndex(i)
-                  ][1]
-                )
+              : formatToLatLng(userTasks.tasks[i].precalculatedRoutes[getPrecalculatedIndex(i)][1])
           }
           // waypoints={getPrecalculatedRoute(i)}
           // precalculatedRoutes={() => getPrecalculatedRoute(i)}
@@ -56,17 +50,10 @@ export function Tasks({ userTasks, allowedTaskTypes }) {
   );
 }
 
-export function Task({
-  taskID,
-  taskType,
-  company,
-  claimed,
-  precalculatedRoutes,
-  schedule,
-  waypoints,
-}) {
+export function Task({ taskID, taskType, company, claimed, precalculatedRoutes, schedule, waypoints }) {
   const [isToggled, setToggle] = useState(false);
   const [claimedPoint, setClaimedPoint] = useState(waypoints[0]);
+  const [isMapPreviewed, setMapPreview] = useState(false);
 
   const markTaskAsFinished = useCallback(() => {
     if (!claimed) return;
@@ -93,37 +80,28 @@ export function Task({
     }
 
     claimTask(taskID, claimedPoint).then(({ success, message }) =>
-      success
-        ? window.location.reload()
-        : alert(message || "Could not claim task")
+      success ? window.location.reload() : alert(message || "Could not claim task")
     );
   }, [claimedPoint, taskID]);
 
   const cancelTaskClientClickHandler = useCallback(() => {
     cancelTaskClient(taskID).then(({ success, message }) =>
-      success
-        ? window.location.reload()
-        : alert(message || "Could not cancel task")
+      success ? window.location.reload() : alert(message || "Could not cancel task")
     );
-  });
+  }, [taskID]);
 
   const cancelTaskWorkerClickHandler = useCallback(() => {
     cancelTaskWorker(taskID).then(({ success, message }) =>
-      success
-        ? window.location.reload()
-        : alert(message || "Could not cancel task")
+      success ? window.location.reload() : alert(message || "Could not cancel task")
     );
-  });
+  }, [taskID]);
 
   return (
     <div className="task">
       <div className={`task-top ${isToggled ? "task-top-toggled" : ""}`}>
         <h2>Task #{taskID}</h2>
 
-        <button
-          className="see-details-toggle"
-          onClick={() => setToggle(!isToggled)}
-        >
+        <button className="see-details-toggle" onClick={() => setToggle(!isToggled)}>
           See {!isToggled ? "details" : "less"}
         </button>
         <h3>
@@ -139,11 +117,7 @@ export function Task({
             <div className="task-pickup-locations">
               {waypoints.map(({ lat, lng }, i) => (
                 <div
-                  className={`data-tag ${
-                    lat === claimedPoint[0] && lng === claimedPoint[1]
-                      ? "data-tag-focused"
-                      : ""
-                  }`}
+                  className={`data-tag ${lat === claimedPoint[0] && lng === claimedPoint[1] ? "data-tag-focused" : ""}`}
                   tabIndex={i}
                   onClick={() => setClaimedPoint([lat, lng])}
                   key={`action-tag__${i}`}
@@ -170,61 +144,65 @@ export function Task({
             </div>
 
             <div className="task-map-preview">
-              {(taskType === TaskTypeEnum.YOUR_TASKS ||
-                taskType === TaskTypeEnum.AVAILABLE_TASKS) && (
-                <Map
-                  center={claimedPoint}
-                  data={waypoints}
-                  editable={false}
-                  line={false}
-                  getMarkers={() => {}}
-                />
+              {(taskType === TaskTypeEnum.YOUR_TASKS || taskType === TaskTypeEnum.AVAILABLE_TASKS) && (
+                <>
+                  {isMapPreviewed ? (
+                    <>
+                      <div
+                        className={`${isMapPreviewed ? "map-preview-on-overlay" : ""}`}
+                        onClick={() => isMapPreviewed && setMapPreview(!isMapPreviewed)}
+                      ></div>
+
+                      <Map center={claimedPoint} data={waypoints} editable={false} line={false} getMarkers={() => {}} />
+                    </>
+                  ) : (
+                    <Map center={claimedPoint} data={waypoints} editable={false} line={false} getMarkers={() => {}} />
+                  )}
+                </>
               )}
-              {(taskType === TaskTypeEnum.ONGOING_TASKS ||
-                taskType === TaskTypeEnum.FINISHED_TASKS) && (
-                <Map
-                  center={claimedPoint}
-                  data={waypoints}
-                  editable={false}
-                  line={true}
-                  getMarkers={() => {}}
-                />
+              {(taskType === TaskTypeEnum.ONGOING_TASKS || taskType === TaskTypeEnum.FINISHED_TASKS) && (
+                <>
+                  {isMapPreviewed ? (
+                    <>
+                      <div
+                        className={`${isMapPreviewed ? "map-preview-on-overlay" : ""}`}
+                        onClick={() => isMapPreviewed && setMapPreview(!isMapPreviewed)}
+                      ></div>
+                      <Map center={claimedPoint} data={waypoints} editable={false} line={true} getMarkers={() => {}} />
+                    </>
+                  ) : (
+                    <Map center={claimedPoint} data={waypoints} editable={false} line={true} getMarkers={() => {}} />
+                  )}
+                </>
               )}
             </div>
           </div>
-          {taskType === TaskTypeEnum.YOUR_TASKS && (
-            <div className="task-buttons">
-              <button
-                className="task-button secondary-button"
-                disabled={!claimed}
-                onClick={markTaskAsFinished}
-              >
-                Mark as finished
-              </button>
-              <button
-                className="task-button secondary-button"
-                onClick={cancelTaskClientClickHandler}
-              >
+          <div className="task-buttons">
+            {taskType === TaskTypeEnum.YOUR_TASKS && (
+              <>
+                <button className="task-button secondary-button" disabled={!claimed} onClick={markTaskAsFinished}>
+                  Mark as finished
+                </button>
+                <button className="task-button secondary-button" onClick={cancelTaskClientClickHandler}>
+                  Cancel
+                </button>
+              </>
+            )}
+            {taskType === TaskTypeEnum.ONGOING_TASKS && (
+              <button className="task-button secondary-button" onClick={cancelTaskWorkerClickHandler}>
                 Cancel
               </button>
-            </div>
-          )}
-          {taskType === TaskTypeEnum.ONGOING_TASKS && (
-            <button
-              className="task-button secondary-button"
-              onClick={cancelTaskWorkerClickHandler}
-            >
-              Cancel
+            )}
+            {taskType === TaskTypeEnum.AVAILABLE_TASKS && (
+              <button className="task-button secondary-button" onClick={claimTaskClickHandler}>
+                Claim
+              </button>
+            )}
+
+            <button className="task-button secondary-button" onClick={() => setMapPreview(!isMapPreviewed)}>
+              Preview map
             </button>
-          )}
-          {taskType === TaskTypeEnum.AVAILABLE_TASKS && (
-            <button
-              className="task-button secondary-button"
-              onClick={claimTaskClickHandler}
-            >
-              Claim
-            </button>
-          )}
+          </div>
         </div>
       )}
     </div>
