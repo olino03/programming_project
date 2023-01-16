@@ -52,7 +52,17 @@ export default function Home() {
             <div className="see-latest-routes">
               <h3>See our latest routes</h3>
               <div className="harta">
-                <Map getMarkers={() => {}} editable={false} line={false} />
+                <Map
+                  getMarkers={() => {}}
+                  editable={false}
+                  line={true}
+                  center={[45.755996, 21.224629]}
+                  data={[
+                    [45.755996, 21.224629],
+                    [45.758032, 21.233949],
+                    [45.752133, 21.229225],
+                  ]}
+                />
               </div>
             </div>
           </div>
